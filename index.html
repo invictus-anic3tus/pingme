@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>PingMe</title>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+</head>
+
+
+<style>
+    :root {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        --primary-color: white;
+        --secondary-color: rgb(206, 147, 58);
+        --hover-color: rgb(151, 108, 43);
+        --font-color: black
+    }
+    body {
+        margin: 0;
+        background-color: var(--primary-color);
+    }
+    #sidebar-main {
+        display: flex;
+        height: fit-content;
+    }
+    #sidebar {
+        background-color: var(--secondary-color);
+        padding: 5px;
+        border-right: 2px solid var(--font-color);
+        border-bottom: 2px solid var(--font-color);
+        border-bottom-right-radius: 15px;
+
+        width: 190px;
+    }
+
+    .tabs {
+        display: flex;
+        flex-direction: column;
+    }
+    .tab {
+        height: auto;
+        margin: 5px;
+        margin-bottom: 5%;
+        transform: scale(1);
+        transition-duration: 0.3s;
+        background-color: transparent;
+        border-radius: 12px;
+        padding: 10%;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+    .tab:hover {
+        /* transform: scale(1.1); */
+        background-color: var(--hover-color);
+        transition-duration: 0.5s;
+    }
+    .tab a {
+        text-decoration: none;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .tab img {
+        padding-right: 10px;
+    }
+    .tab span {
+        margin: auto;
+        color: var(--font-color);
+        font-size: 1.5em;
+    }
+    #header  {
+        display: flex;
+        text-align: center;
+        align-items: center;
+        margin: 10px;
+        margin-top: 20px;
+        margin-bottom: 35px;
+    }
+    #header img {
+        width: 50px;
+        height: auto;
+    }
+    #header span {
+        margin-left: 5%;
+        font-size: 2em;
+        font-weight: 400;
+    }
+    #light-dark {
+        width: fit-content;
+        height: fit-content;
+        padding: 0;
+        margin: 10px;
+        margin-top: 25%;
+    }
+    #light-dark img {
+        padding: 0%;
+    }
+    #light-dark:hover {
+        background-color: transparent;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+
+    <div id="sidebar-main">
+        <div id="sidebar">
+            <div id="header">
+                <img src="images/PingMe.png">
+                <span style="display: inline;">PingMe</span>
+            </div>
+            <div id="tabs">
+                <div class="tab">
+                    <a href="">
+                    <img src="/images/Note.png" alt="My stuff">
+                    <span>My pings</span></a>
+                </div>
+                <div class="tab">
+                    <a href="">
+                    <img src="/images/Plus.png" alt="New reminder">
+                    <span>Add ping</span></a>
+                </div>
+                <div style="height: 2px; width: 90%; background-color: var(--hover-color); margin: 5%;"></div>
+                <div class="tab">
+                    <a href="">
+                    <img src="/images/Settings.png" alt="Settings">
+                    <span>Settings</span></a>
+                </div>
+                <div class="tab" id="light-dark" onclick="colorMode()">
+                    <img src="/images/dark_mode.png" alt="Dark/Light mode" id="modeind">
+                </div>
+
+            </div>
+        </div>
+        <div id="main">
+
+        </div>
+    </div>
+
+    <script>
+        const root = document.querySelector(':root');
+        const modeInd = document.getElementById('modeind');
+
+        var dark = false;
+        var darkBKG = '#01041a';
+        var lightBKG = '#FFFFFF';
+
+        function colorMode() {
+            if (dark) {
+                root.style.setProperty('--primary-color', lightBKG);
+                dark = false;
+                return;
+            }
+            root.style.setProperty('--primary-color', darkBKG);
+            dark = true;
+        }
+    </script>
+</body>
+
+</html>
