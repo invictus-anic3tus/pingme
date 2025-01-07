@@ -14,32 +14,61 @@
     :root {
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         --primary-color: white;
-        --secondary-color: rgb(206, 147, 58);
-        --hover-color: rgb(151, 108, 43);
-        --font-color: black
+        --secondary-color: #e6be74;
+        --hover-color: #865b09;
+        --hover-color: #fdfdfd;
+        --font-color: black;
     }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    div,
+    span,
+    label {
+        color: var(--font-color);
+    }
+
     body {
         margin: 0;
         background-color: var(--primary-color);
+        transition-duration: 0.3s;
     }
+
+
+
+    /**************** Sidebar ***************/
+
     #sidebar-main {
         display: flex;
         height: fit-content;
     }
+
     #sidebar {
         background-color: var(--secondary-color);
-        padding: 5px;
-        border-right: 2px solid var(--font-color);
-        border-bottom: 2px solid var(--font-color);
-        border-bottom-right-radius: 15px;
+        transition-duration: 0.3s;
 
-        width: 190px;
+        padding: 5px;
+        padding-bottom: 0;
+        padding-top: 0;
+        margin-bottom: 0;
+        border-right: 2px solid var(--font-color);
+
+        height: fit-content;
+        min-height: 100vh;
+
+        width: 200px;
     }
 
-    .tabs {
+    #tabs {
         display: flex;
         flex-direction: column;
+        height: 89vh;
+        min-height: fit-content;
     }
+
     .tab {
         height: auto;
         margin: 5px;
@@ -52,26 +81,51 @@
         padding-right: 5px;
         padding-left: 5px;
     }
+
     .tab:hover {
-        /* transform: scale(1.1); */
         background-color: var(--hover-color);
         transition-duration: 0.5s;
+        cursor: pointer;
     }
+
     .tab a {
         text-decoration: none;
         height: 100%;
         display: flex;
         align-items: center;
     }
+
     .tab img {
         padding-right: 10px;
+        transition-duration: 0.3s;
     }
+
     .tab span {
         margin: auto;
         color: var(--font-color);
         font-size: 1.5em;
+
+        text-wrap: nowrap;
     }
-    #header  {
+
+
+    #collapse {
+        width: fit-content;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 10%;
+        align-self: flex-end;
+    }
+
+
+    .divider {
+        height: 2px;
+        width: 90%;
+        background-color: var(--font-color);
+        margin: 5%;
+    }
+
+    #sidebar-header {
         display: flex;
         text-align: center;
         align-items: center;
@@ -79,28 +133,250 @@
         margin-top: 20px;
         margin-bottom: 35px;
     }
-    #header img {
+
+    #sidebar-header img {
         width: 50px;
         height: auto;
     }
-    #header span {
+
+    #sidebar-header span {
         margin-left: 5%;
         font-size: 2em;
         font-weight: 400;
+        color: var(--font-color);
     }
-    #light-dark {
+
+    #mini-tabs {
+        display: flex;
+        margin-top: auto;
+    }
+
+    #mini-tabs img {
+        width: 90%;
+        padding: 0%;
+        transition-duration: 0.3s;
+    }
+
+    #mini-tabs a {
+        width: fit-content;
+    }
+
+    #light-dark,
+    #mini-tabs div {
         width: fit-content;
         height: fit-content;
         padding: 0;
         margin: 10px;
-        margin-top: 25%;
     }
+
     #light-dark img {
         padding: 0%;
     }
-    #light-dark:hover {
+
+    #light-dark:hover,
+    #mini-tabs div:hover {
         background-color: transparent;
         cursor: pointer;
+    }
+
+    #about {
+        position: relative;
+    }
+
+    #about-info {
+        position: absolute;
+        margin-left: -80px !important;
+        margin-top: -70px !important;
+        width: 170px !important;
+        height: 20px !important;
+        text-align: center;
+        background-color: var(--primary-color);
+        border: 2px solid var(--font-color);
+        border-radius: 10px;
+        padding: 10px !important;
+        color: var(--font-color);
+
+        scale: 0;
+        transition-duration: 0.2s;
+    }
+
+    #about-info:hover {
+        background-color: var(--hover-color) !important;
+    }
+
+
+
+    /************** Main Block *************/
+
+
+    #main {
+        width: 100vw;
+    }
+
+    .main-tab {
+        display: none;
+        width: 100%;
+    }
+
+    #home-tab {
+        display: block;
+    }
+
+    .main-header {
+        font-size: 3em;
+        padding: 20px;
+        margin-top: 0;
+        width: fit-content;
+        border-bottom: 7px double var(--font-color);
+        border-right: 7px double var(--font-color);
+        border-bottom-right-radius: 20px;
+    }
+
+    #pings-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .ping {
+        grid-row: auto;
+        border: 2px solid var(--font-color);
+        border-radius: 10px;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .title-ping-flex {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .ping-title {
+        align-self: center;
+        font-size: 1.2em;
+        background-color: transparent;
+        border: 0;
+        color: var(--font-color);
+        width: fit-content;
+        cursor: default;
+    }
+
+    .ping-title:focus {
+        outline: none;
+    }
+
+    .options {
+        height: 35px;
+        padding-top: -5px;
+        align-self: center;
+        width: auto;
+        cursor: pointer;
+    }
+
+    .edit {
+        height: 30px;
+        width: auto;
+        align-self: center;
+        cursor: pointer;
+    }
+
+    .dot-options {
+        text-align: left;
+        align-self: flex-end;
+        position: absolute;
+        margin-left: 10%;
+        scale: 1;
+
+        padding: 5px;
+        transition-duration: 0.3s;
+        background-color: var(--secondary-color);
+        border: 2px solid black;
+        border-radius: 10px;
+    }
+
+    .dot-options button {
+        padding: 2px;
+        padding-right: 0;
+        padding-left: 0;
+        margin: 0;
+        background-color: transparent;
+        border: 0;
+        color: var(--font-color);
+        display: block;
+        font-size: 1em;
+        letter-spacing: 0.9px;
+    }
+
+
+    .ping-desc {
+        resize: none;
+        font-size: 1em;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        background-color: transparent;
+        border: 0;
+        color: var(--font-color);
+        width: 100%;
+        margin-top: 10px;
+        cursor: default;
+        outline: 0;
+    }
+
+    .repeat-num {
+        display: none;
+        width: 35px;
+    }
+
+    /***************** Media Queries ***************/
+    @media (max-width: 600px) {
+        #sidebar-main {
+            display: block;
+            width: 100vw;
+        }
+
+        #sidebar {
+            height: 10px !important;
+            min-height: fit-content;
+            width: 100vw !important;
+            margin: 0;
+            padding: 0;
+            padding-top: 10px;
+            border: 0;
+            border-top: 2px solid;
+            position: absolute;
+            bottom: 0;
+        }
+
+        #tabs {
+            display: flex;
+            flex-direction: row;
+            height: fit-content;
+            justify-content: space-evenly;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab {
+            padding: 0;
+        }
+
+        .tab span,
+        .divider,
+        #mini-tabs,
+        #light-dark,
+        #sidebar-header,
+        #collapse {
+            display: none !important;
+        }
+
+        .tab img {
+            padding: 10px !important;
+        }
+
+
+
+        #pings-container {
+            display: block !important;
+        }
     }
 </style>
 
@@ -108,54 +384,421 @@
 
     <div id="sidebar-main">
         <div id="sidebar">
-            <div id="header">
+            <div id="sidebar-header">
                 <img src="images/PingMe.png">
                 <span style="display: inline;">PingMe</span>
             </div>
             <div id="tabs">
-                <div class="tab">
-                    <a href="">
-                    <img src="/images/Note.png" alt="My stuff">
-                    <span>My pings</span></a>
+                <div class="tab" id="collapse">
+                    <a onclick="collapse()" style="width: fit-content;">
+                        <img src="/images/hide_sidebar.png" alt="Collapse Sidebar" class="icon" style="padding: 0;"
+                            id="collapse-ind">
+                    </a>
                 </div>
-                <div class="tab">
-                    <a href="">
-                    <img src="/images/Plus.png" alt="New reminder">
-                    <span>Add ping</span></a>
+
+                <div class="divider"></div>
+
+                <div class="tab" id="home">
+                    <a onclick="tab('home')">
+                        <img src="/images/Home.png" alt="Home" class="icon">
+                        <span>Home</span></a>
                 </div>
-                <div style="height: 2px; width: 90%; background-color: var(--hover-color); margin: 5%;"></div>
-                <div class="tab">
-                    <a href="">
-                    <img src="/images/Settings.png" alt="Settings">
-                    <span>Settings</span></a>
+                <div class="tab" id="my-pings">
+                    <a onclick="tab('my-pings')">
+                        <img src="/images/Pings.png" alt="My pings" class="icon">
+                        <span>All pings</span></a>
                 </div>
+                <div class="tab" id="new">
+                    <a onclick="tab('new')">
+                        <img src="/images/Plus.png" alt="New ping" class="icon">
+                        <span>Add ping</span></a>
+                </div>
+
+
+                <div class="divider"></div>
+
+
+                <div class="tab" id="settings">
+                    <a onclick="tab('settings')">
+                        <img src="/images/Settings.png" alt="Settings" class="icon">
+                        <span>Settings</span></a>
+                </div>
+
                 <div class="tab" id="light-dark" onclick="colorMode()">
                     <img src="/images/dark_mode.png" alt="Dark/Light mode" id="modeind">
+                </div>
+
+                <div id="mini-tabs">
+                    <div class="tab" id="github">
+                        <a href="https://github.com/invictus-anic3tus/pingme"><img src="/images/github.svg" alt="GitHub"
+                                class="icon"></a>
+                    </div>
+                    <div class="tab" id="about">
+                        <a href="https://invictus-anic3tus.github.io/">
+                            <div id="about-info">About the Creator</div><img src="/images/question_mark.png"
+                                alt="About the Creator" class="icon" style="margin-top: 7px;">
+                        </a>
+                    </div>
                 </div>
 
             </div>
         </div>
         <div id="main">
+            <div id="home-tab" class="main-tab">
+                <h1 class="main-header">Home</h1>
+
+                <div id="home-tab-pings">
+
+                    <h1 style="text-align: center;">Upcoming Pings:</h1>
+
+                    <div id="pings-container">
+                        <div class="ping" id="0">
+                            <div class="title-ping-flex">
+                                <input type="text" value='Hi' class="ping-title" readonly spellcheck="false"></input>
+                                <img src="/images/Edit.png" alt="Edit Ping" class="icon edit" onclick="editPing(this)">
+
+                                <!-- <img src="/images/vert_ellipsis.png" alt="Options" class="icon options" onclick="optionPopUp(0)"> -->
+                                <!-- <div class="dot-options">
+                                    <button onclick="complete(this)">Complete</button>
+                                    <button>Delay</button>
+                                    <button>Edit</button>
+                                    <button>Delete</button>
+                                </div> -->
+                            </div>
+
+                            <textarea name="ping-desc" class="ping-desc" readonly
+                                spellcheck="false">Description and succh asdfasdfasdf</textarea>
+
+                            <div>Repeats every <span class="repeat-num-display">10</span> <input type="number"
+                                    inputmode="numeric" class="repeat-num"><select name="repeat-type" id="repeat-type">
+                                    <option value="days">Hours</option>
+                                    <option value="days">Days</option>
+                                    <option value="days">Weeks</option>
+                                    <option value="days">Months</option>
+                                    <option value="days">Years</option>
+                                </select></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="pings-tab" class="main-tab">
+                <h1 class="main-header">All Pings</h1>
+
+                <div id="all-pings">
+
+                </div>
+
+            </div>
+
+            <div id="add-ping-tab" class="main-tab">
+                <h1 class="main-header">Add Ping</h1>
+
+                <div id="add-interface">
+
+                </div>
+
+            </div>
+
+            <div id="settings-tab" class="main-tab">
+                <h1 class="main-header">Settings</h1>
+
+                <div id="settings-interface">
+
+                </div>
+
+            </div>
 
         </div>
     </div>
 
     <script>
         const root = document.querySelector(':root');
+        const body = document.querySelector('body');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarHeader = document.getElementById('sidebar-header');
         const modeInd = document.getElementById('modeind');
+        const icons = document.querySelectorAll('.icon');
+        const collapseBut = document.getElementById('collapse');
+        const collapseInd = document.getElementById('collapse-ind');
+        const tabs = document.querySelectorAll('.tab');
+        const miniTabs = document.getElementById('mini-tabs');
+        const about = document.getElementById('about');
+        const aboutpopup = document.getElementById('about-info');
 
-        var dark = false;
-        var darkBKG = '#01041a';
+        const homeTab = document.getElementById('home-tab');
+        const pingsTab = document.getElementById('pings-tab');
+        const newTab = document.getElementById('add-ping-tab');
+        const settingsTab = document.getElementById('settings-tab');
+
+
+        const editIcon = document.querySelectorAll('.edit');
+
+        const options = document.querySelectorAll('.options');
+        const optionsPopUp = document.querySelectorAll('.dot-options');
+
+        var darkS = localStorage.getItem('dark');
+        var dark = (darkS === 'true');
+
+        var darkBKG = '#222831';
         var lightBKG = '#FFFFFF';
+        var lightSecondary = '#e6be74';
+        var darkSecondary = '#3A4750';
+        var fontColor = '#000000';
+
+        var collapsed = false;
+
+        // Code to execute at beginning:
+        tabs.forEach(element => {
+            element.style.backgroundColor = 'transparent';
+            if (element.id == 'home') {
+                element.style.backgroundColor = getComputedStyle(root).getPropertyValue('--hover-color');
+            }
+        });
+
+        body.style.transitionDuration = '0s';
+        sidebar.style.transitionDuration = '0s';
+
+        icons.forEach(icon => {
+            icon.style.transitionDuration = '0s';
+        });
+        optionsPopUp.forEach(popup => {
+            popup.style.transitionDuration = '0s';
+        });
+
+        if (dark == true) {
+            setDark();
+        }
+        else {
+            setLight();
+        }
+        body.style.transitionDuration = '0.3s';
+        sidebar.style.transitionDuration = '0.3s';
+
+        icons.forEach(icon => {
+            icon.style.transitionDuration = '0.3s';
+        });
+        optionsPopUp.forEach(popup => {
+            popup.style.transitionDuration = '0.3s';
+        });
+
+
+
+        about.addEventListener('mouseover', (event) => {
+            aboutpopup.style.scale = '1';
+        });
+        about.addEventListener('mouseout', (event) => {
+            aboutpopup.style.scale = '0';
+        });
+
+        // Functions:
+
+        function editPing(obj) {
+            let grampsDiv = obj.parentElement.parentElement;
+
+            let title = obj.parentElement.querySelector('.ping-title');
+            title.style.border = '2px solid gray';
+            title.style.borderRadius = '5px';
+            title.removeAttribute('readonly');
+            title.style.cursor = 'text';
+            title.style.backgroundColor = 'white';
+            title.style.color = 'black';
+            title.setAttribute('spellcheck', 'true');
+
+            let desc = grampsDiv.querySelector('.ping-desc');
+            desc.style.border = '2px solid gray';
+            desc.style.borderRadius = '5px';
+            desc.removeAttribute('readonly');
+            desc.style.cursor = 'text';
+            desc.style.backgroundColor = 'white';
+            desc.style.color = 'black';
+            desc.setAttribute('spellcheck', 'true');
+
+            let repeatNum = grampsDiv.querySelector('.repeat-num');
+            repeatNum.style.display = 'inline';
+
+            obj.src = '/images/Check.png';
+            obj.style.marginTop = '1px';
+            obj.setAttribute('onclick', 'finishEditPing(this)');
+        }
+        function finishEditPing(obj) {
+            let parentDiv = obj.parentElement;
+            let grampsDiv = parentDiv.parentElement;
+
+            let title = parentDiv.querySelector('.ping-title');
+            title.style.border = '0';
+            title.style.borderRadius = '0';
+            title.setAttribute('readonly', '');
+            title.style.cursor = 'default';
+            title.style.backgroundColor = 'transparent';
+            title.style.color = 'var(--font-color)';
+            title.setAttribute('spellcheck', 'false');
+
+            localStorage.setItem(grampsDiv.id + '-title', title.value);
+
+            let desc = grampsDiv.querySelector('.ping-desc');
+            desc.style.border = '0';
+            desc.style.borderRadius = '0';
+            desc.setAttribute('readonly', '');
+            desc.style.cursor = 'default';
+            desc.style.backgroundColor = 'transparent';
+            desc.style.color = 'var(--font-color)';
+            desc.setAttribute('spellcheck', 'false');
+
+            let repeatNum = grampsDiv.querySelector('.repeat-num');
+            repeatNum.style.display = 'none';
+
+            localStorage.setItem(grampsDiv.id + '-desc', desc.value);
+
+            obj.src = '/images/Edit.png';
+            obj.style.marginTop = 'initial';
+            obj.setAttribute('onclick', 'editPing(this)');
+        }
+
+        function optionPopUp(num) {
+            optionsPopUp[num].style.scale = '1';
+        }
+
+        function collapse() {
+
+            if (!collapsed) {
+
+                tabs.forEach(tab => {
+
+                    let span = tab.querySelector('span');
+                    let img = tab.querySelector('img');
+
+                    if (span) {
+                        span.style.display = 'none';
+                        tab.style.width = 'fit-content';
+                    }
+                    if (img) {
+                        img.style.paddingRight = '0';
+                    }
+
+                    tab.style.marginBottom = '20%';
+
+                });
+
+                sidebarHeader.querySelector('span').style.display = 'none';
+                sidebar.style.width = 'fit-content';
+                collapseInd.src = '/images/show_sidebar.png';
+                collapseBut.style.alignSelf = 'flex-start';
+
+                miniTabs.querySelector('#about').style.display = 'none';
+
+                collapsed = true;
+            }
+            else {
+
+
+                tabs.forEach(tab => {
+
+                    let span = tab.querySelector('span');
+                    let img = tab.querySelector('img');
+
+                    if (span) {
+                        span.style.display = 'inline';
+                        tab.style.width = 'auto';
+                    }
+                    if (img) {
+                        img.style.paddingRight = '10px';
+                    }
+
+                });
+
+                sidebarHeader.querySelector('span').style.display = 'inline';
+                sidebar.style.width = '200px';
+                collapseInd.src = '/images/hide_sidebar.png';
+                collapseBut.style.alignSelf = 'flex-end';
+
+                miniTabs.querySelector('#about').style.display = 'block';
+
+                collapsed = false;
+            }
+        }
+
+        function tab(tab) {
+            tabs.forEach(element => {
+                element.style.backgroundColor = 'transparent';
+            });
+            var tabobj = document.getElementById(tab);
+            tabobj.style.backgroundColor = getComputedStyle(root).getPropertyValue('--hover-color');
+
+            document.querySelectorAll('.main-tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+
+            switch (tab) {
+                case 'home': // home-tab, pings-tab, add-ping-tab, settings-tab
+                    document.getElementById('home-tab').style.display = 'block';
+                    break;
+                case 'my-pings':
+                    document.getElementById('pings-tab').style.display = 'block';
+                    break;
+                case 'new':
+                    document.getElementById('add-ping-tab').style.display = 'block';
+                    break;
+                case 'settings':
+                    document.getElementById('settings-tab').style.display = 'block';
+                    break;
+                default:
+                    break;
+            }
+        }
 
         function colorMode() {
             if (dark) {
-                root.style.setProperty('--primary-color', lightBKG);
+                setLight();
                 dark = false;
-                return;
             }
+            else {
+                setDark();
+                dark = true;
+            }
+            localStorage.setItem('dark', dark);
+        }
+
+        function setDark() {
+            fontColor = '#FFFFFF';
             root.style.setProperty('--primary-color', darkBKG);
-            dark = true;
+            root.style.setProperty('--hover-color', '#888888');
+            root.style.setProperty('--secondary-color', darkSecondary);
+            root.style.setProperty('--font-color', fontColor);
+
+            modeInd.src = '/images/light_mode.png';
+
+            icons.forEach(icon => {
+                icon.style.filter = 'invert(100%)';
+            });
+            resetSelector();
+
+        }
+        function setLight() {
+            fontColor = '#000000';
+            root.style.setProperty('--primary-color', lightBKG);
+            root.style.setProperty('--hover-color', '#fdfdfd');
+            root.style.setProperty('--secondary-color', lightSecondary);
+            root.style.setProperty('--font-color', fontColor);
+
+            modeInd.src = '/images/dark_mode.png';
+
+            icons.forEach(icon => {
+                icon.style.filter = 'invert(0)';
+            });
+            resetSelector();
+
+        }
+
+        function resetSelector() {
+            document.querySelectorAll('.tab').forEach(element => {
+                if (element.style.backgroundColor != 'transparent') {
+                    element.style.backgroundColor = getComputedStyle(root).getPropertyValue('--hover-color');
+                }
+                else { element.style.backgroundColor = 'transparent'; }
+            });
         }
     </script>
 </body>
