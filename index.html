@@ -67,6 +67,7 @@
         flex-direction: column;
         height: 89vh;
         min-height: fit-content;
+        justify-content: flex-start;
     }
 
     .tab {
@@ -244,6 +245,10 @@
         border-radius: 10px;
         margin: 10px;
         padding: 10px;
+
+        display: block;
+
+        background-color: var(--secondary-color);
     }
 
     .title-ping-flex {
@@ -253,12 +258,15 @@
 
     .ping-title {
         align-self: center;
-        font-size: 1.2em;
+        font-size: 1.5em;
         background-color: transparent;
         border: 0;
         color: var(--font-color);
         width: fit-content;
         cursor: default;
+        border-bottom: 2px solid var(--font-color);
+
+        text-overflow: ellipsis;
     }
 
     .ping-title:focus {
@@ -310,12 +318,13 @@
 
     .ping-desc {
         resize: none;
-        font-size: 1em;
+        font-size: 1.1em;
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         background-color: transparent;
         border: 0;
         color: var(--font-color);
         width: 100%;
+
         margin-top: 10px;
         cursor: default;
         outline: 0;
@@ -324,6 +333,89 @@
     .repeat-num {
         display: none;
         width: 35px;
+    }
+
+    .does-repeat-label,
+    .does-repeat {
+        display: none;
+    }
+
+    .ping-date {
+        border: 1px solid var(--font-color);
+        width: fit-content;
+        padding: 2px;
+        padding-left: 3px;
+        padding-right: 3px;
+        border-radius: 5px;
+        background-color: var(--primary-color);
+    }
+
+    .ping-functions {
+        display: flex;
+        justify-content: space-evenly;
+        height: 25px;
+        margin-top: 5px;
+    }
+
+    .ping-functions button {
+        width: 100%;
+        height: 100%;
+        color: var(--font-color);
+    }
+
+    .ping-functions button:active {
+        background-color: var(--hover-color);
+    }
+
+    .complete-yes {
+        border: 1px solid var(--font-color);
+        border-left: 2px solid var(--font-color);
+        border-top: 2px solid var(--font-color);
+        border-bottom: 2px solid var(--font-color);
+        border-radius: 10px 0px 0px 10px;
+        background-color: green;
+
+        width: 50%;
+        color: var(--font-color);
+    }
+
+    .ping-delay {
+        border: 0;
+        border-top: 2px solid var(--font-color);
+        border-bottom: 2px solid var(--font-color);
+        background-color: rgb(31, 203, 233);
+    }
+
+    .delete-no {
+        border: 1px solid var(--font-color);
+        border-right: 2px solid var(--font-color);
+        border-top: 2px solid var(--font-color);
+        border-bottom: 2px solid var(--font-color);
+        border-radius: 0px 10px 10px 0px;
+        background-color: red;
+
+        width: 50%;
+        color: var(--font-color);
+    }
+
+
+    #full-pop-up {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-25%, -50%);
+
+        border: 2px solid var(--font-color);
+        background-color: var(--primary-color);
+        border-radius: 20px;
+        padding: 10px;
+        scale: 0;
+        transition-duration: 0.3s;
+    }
+
+    #full-pop-up div {
+        display: flex;
     }
 
     /***************** Media Queries ***************/
@@ -452,9 +544,11 @@
                     <h1 style="text-align: center;">Upcoming Pings:</h1>
 
                     <div id="pings-container">
-                        <div class="ping" id="0">
+                        <div class="ping" id="0" style="display: block;">
                             <div class="title-ping-flex">
                                 <input type="text" value='Hi' class="ping-title" readonly spellcheck="false"></input>
+
+
                                 <img src="/images/Edit.png" alt="Edit Ping" class="icon edit" onclick="editPing(this)">
 
                                 <!-- <img src="/images/vert_ellipsis.png" alt="Options" class="icon options" onclick="optionPopUp(0)"> -->
@@ -466,22 +560,34 @@
                                 </div> -->
                             </div>
 
+                            <p>Pings on <span class="ping-date">Jan 1, 2024</span></p>
+
                             <textarea name="ping-desc" class="ping-desc" readonly
                                 spellcheck="false">Description and succh asdfasdfasdf</textarea>
 
-                            <div>Repeats every <span class="repeat-num-display">10</span> <input type="number"
-                                    inputmode="numeric" class="repeat-num"><select name="repeat-type" id="repeat-type">
-                                    <option value="days">Hours</option>
-                                    <option value="days">Days</option>
-                                    <option value="days">Weeks</option>
-                                    <option value="days">Months</option>
-                                    <option value="days">Years</option>
-                                </select></div>
+                            <label class="does-repeat-label">Repeat?</label>
+                            <input type="checkbox" name="does-repeat" class="does-repeat">
+
+                            <div class="repeat-cont">Repeats every <span class="repeat-num-display">10</span>
+                                <input type="number" inputmode="numeric" class="repeat-num"><select name="repeat-type"
+                                    class="repeat-type" style="display: none;">
+                                    <option value="hours">hours</option>
+                                    <option value="days">days</option>
+                                    <option value="weeks">weeks</option>
+                                    <option value="months">months</option>
+                                    <option value="years">years</option>
+                                </select><span class="repeat-type-display">hours</span>
+                            </div>
+
+                            <div class="ping-functions">
+                                <button class="complete-yes">Complete</button>
+                                <button class="ping-delay">Delay</button>
+                                <button class="delete-no" onclick="deletePing(this, false)">Delete</button>
+                            </div>
                         </div>
                     </div>
 
                 </div>
-
             </div>
 
             <div id="pings-tab" class="main-tab">
@@ -511,6 +617,16 @@
 
             </div>
 
+            <div id="full-pop-up">
+                <h1>Pop up title</h1>
+                <p>Pop up information.</p>
+                <div>
+                    <button class="complete-yes" onclick="this.parentElement.parentElement.style.scale = '0'">Go
+                        back</button>
+                    <button class="delete-no" onclick="deletePing(null, true)">delete</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -533,11 +649,15 @@
         const newTab = document.getElementById('add-ping-tab');
         const settingsTab = document.getElementById('settings-tab');
 
+        const pings = document.querySelectorAll('.ping');
+
 
         const editIcon = document.querySelectorAll('.edit');
 
         const options = document.querySelectorAll('.options');
         const optionsPopUp = document.querySelectorAll('.dot-options');
+
+        const popup = document.getElementById('full-pop-up');
 
         var darkS = localStorage.getItem('dark');
         var dark = (darkS === 'true');
@@ -549,6 +669,7 @@
         var fontColor = '#000000';
 
         var collapsed = false;
+        var pingToDelete;
 
         // Code to execute at beginning:
         tabs.forEach(element => {
@@ -584,8 +705,6 @@
             popup.style.transitionDuration = '0.3s';
         });
 
-
-
         about.addEventListener('mouseover', (event) => {
             aboutpopup.style.scale = '1';
         });
@@ -593,12 +712,123 @@
             aboutpopup.style.scale = '0';
         });
 
+        pings.forEach(ping => { setupPing(ping); checkPingDate(ping); });
+
+
+
+        if (Notification.permission === "granted") {
+        
+            var notif =  new Notification("Hello! Notifications are enabled.", {
+                body: "notification",
+                icon: "/images/PingMe.png"
+            });
+            
+        } else if (Notification.permission === "denied") {
+
+            console.log("User has denied notifications. Can't send.");
+
+        } else if (Notification.permission === "default") {
+            // Ask for permission
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new Notification("Thanks for enabling notifications!");
+                } else {
+                    console.log("Notifications permission denied or dismissed.");
+                }
+            });
+        }
+
+
+
+
         // Functions:
+
+        function deletePing(obj, final) {
+            if (final) {
+                pingToDelete.style.display = 'none';
+                localStorage.setItem(pingToDelete.id + '-deleted', 'true');
+                popup.style.scale = '0';
+            }
+            else {
+                popup.querySelector("h1").innerText = 'Are you sure you want to delete ping ' + obj.parentElement.parentElement.querySelector('.ping-title').value + '?';
+                popup.style.scale = '1';
+                pingToDelete = obj.parentElement.parentElement;
+            }
+        }
+
+        function checkPingDate(obj) {
+            let dateStr = obj.querySelector('.ping-date').innerText;
+            let date = new Date(dateStr);
+
+            if (isPingNow(date)) {
+                // console.log("hi");
+            }
+        }
+
+        function isPingNow(date) {
+            const today = new Date();
+
+            return date < today;
+        }
+
+        function fillEmptyText(obj) {
+            let title = obj.querySelector('.ping-title');
+            let desc = obj.querySelector('.ping-desc');
+
+            if (title.value.trim() == '') {
+                title.value = 'My Ping';
+            }
+            if (desc.value.trim() == '') {
+                desc.value = 'Optional description about my ping';
+            }
+        }
+
+        function setupPing(obj) {
+            if (obj.style.display == 'none' || localStorage.getItem(obj.id + '-deleted') == 'true') {
+                obj.style.display = 'none';
+                return;
+            }
+
+            let title = obj.querySelector('.ping-title');
+            let desc = obj.querySelector('.ping-desc');
+            let repeatNumDisplay = obj.querySelector('.repeat-num-display');
+            let repeatNum = obj.querySelector('.repeat-num');
+            let repeatType = obj.querySelector('.repeat-type');
+            let repeatTypeDisplay = obj.querySelector('.repeat-type-display');
+            let doesRepeat = obj.querySelector('.does-repeat');
+
+            title.value = localStorage.getItem(obj.id + '-title');
+            desc.value = localStorage.getItem(obj.id + '-desc');
+
+            fillEmptyText(obj);
+
+            doesRepeat.checked = localStorage.getItem(obj.id + '-does-repeat') == 'true';
+
+            if (doesRepeat.checked == true) {
+                repeatNumDisplay.innerText = localStorage.getItem(obj.id + '-repeat-num');
+                repeatNum.value = repeatNumDisplay.innerText;
+
+                repeatTypeDisplay.innerText = localStorage.getItem(obj.id + '-repeat-type');
+                repeatType.value = repeatTypeDisplay.innerText;
+            }
+            else {
+                obj.querySelector('.repeat-cont').style.display = 'none';
+            }
+        }
+
 
         function editPing(obj) {
             let grampsDiv = obj.parentElement.parentElement;
-
             let title = obj.parentElement.querySelector('.ping-title');
+            let desc = grampsDiv.querySelector('.ping-desc');
+            let date = grampsDiv.querySelector('.ping-date');
+
+            let repeatCont = grampsDiv.querySelector('.repeat-cont');
+            let repeatNum = grampsDiv.querySelector('.repeat-num');
+            let repeatType = grampsDiv.querySelector('.repeat-type');
+            let repeatTypeDisplay = grampsDiv.querySelector('.repeat-type-display');
+            let doesRepeat = grampsDiv.querySelector('.does-repeat');
+
             title.style.border = '2px solid gray';
             title.style.borderRadius = '5px';
             title.removeAttribute('readonly');
@@ -607,7 +837,6 @@
             title.style.color = 'black';
             title.setAttribute('spellcheck', 'true');
 
-            let desc = grampsDiv.querySelector('.ping-desc');
             desc.style.border = '2px solid gray';
             desc.style.borderRadius = '5px';
             desc.removeAttribute('readonly');
@@ -616,8 +845,15 @@
             desc.style.color = 'black';
             desc.setAttribute('spellcheck', 'true');
 
-            let repeatNum = grampsDiv.querySelector('.repeat-num');
+            grampsDiv.querySelector('.does-repeat-label').style.display = 'inline';
+            doesRepeat.style.display = 'inline';
+
+            repeatCont.style.display = 'block';
+            repeatType.style.display = 'inline';
+            repeatTypeDisplay.style.display = 'none';
+
             repeatNum.style.display = 'inline';
+            grampsDiv.querySelector('.repeat-num-display').style.display = 'none';
 
             obj.src = '/images/Check.png';
             obj.style.marginTop = '1px';
@@ -626,9 +862,19 @@
         function finishEditPing(obj) {
             let parentDiv = obj.parentElement;
             let grampsDiv = parentDiv.parentElement;
-
             let title = parentDiv.querySelector('.ping-title');
+            let desc = grampsDiv.querySelector('.ping-desc');
+
+            let repeatCont = grampsDiv.querySelector('.repeat-cont');
+            let repeatNum = grampsDiv.querySelector('.repeat-num');
+            let repeatNumDisplay = grampsDiv.querySelector('.repeat-num-display');
+            let repeatType = grampsDiv.querySelector('.repeat-type');
+            let repeatTypeDisplay = grampsDiv.querySelector('.repeat-type-display');
+            let doesRepeat = grampsDiv.querySelector('.does-repeat');
+            let doesRepeatVal = doesRepeat.checked;
+
             title.style.border = '0';
+            title.style.borderBottom = '2px solid var(--font-color)';
             title.style.borderRadius = '0';
             title.setAttribute('readonly', '');
             title.style.cursor = 'default';
@@ -636,9 +882,6 @@
             title.style.color = 'var(--font-color)';
             title.setAttribute('spellcheck', 'false');
 
-            localStorage.setItem(grampsDiv.id + '-title', title.value);
-
-            let desc = grampsDiv.querySelector('.ping-desc');
             desc.style.border = '0';
             desc.style.borderRadius = '0';
             desc.setAttribute('readonly', '');
@@ -647,10 +890,31 @@
             desc.style.color = 'var(--font-color)';
             desc.setAttribute('spellcheck', 'false');
 
-            let repeatNum = grampsDiv.querySelector('.repeat-num');
-            repeatNum.style.display = 'none';
+            if (doesRepeatVal) {
+                repeatNumDisplay.innerText = repeatNum.value;
+                repeatNum.style.display = 'none';
+                repeatNumDisplay.style.display = 'inline';
 
+                repeatTypeDisplay.innerText = repeatType.value;
+                repeatType.style.display = 'none';
+                repeatTypeDisplay.style.display = 'inline';
+            }
+            else {
+                repeatCont.style.display = 'none';
+            }
+            doesRepeat.style.display = 'none';
+            grampsDiv.querySelector('.does-repeat-label').style.display = 'none';
+
+
+            fillEmptyText(grampsDiv);
+
+
+            localStorage.setItem(grampsDiv.id + '-title', title.value);
             localStorage.setItem(grampsDiv.id + '-desc', desc.value);
+
+            localStorage.setItem(grampsDiv.id + '-does-repeat', doesRepeatVal);
+            localStorage.setItem(grampsDiv.id + '-repeat-num', repeatNum.value);
+            localStorage.setItem(grampsDiv.id + '-repeat-type', repeatType.value);
 
             obj.src = '/images/Edit.png';
             obj.style.marginTop = 'initial';
@@ -706,6 +970,8 @@
                     if (img) {
                         img.style.paddingRight = '10px';
                     }
+
+                    tab.style.marginBottom = 'initial';
 
                 });
 
