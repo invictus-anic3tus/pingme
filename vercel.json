@@ -1,0 +1,16 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "pages/api/send-notification.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/send-notification",
+        "dest": "/pages/api/send-notification.js"
+      }
+    ]
+  }
+  
