@@ -570,8 +570,8 @@
                             <input type="checkbox" name="does-repeat" class="does-repeat">
 
                             <div class="repeat-cont">Repeats every <span class="repeat-num-display">10</span>
-                                <input type="number" inputmode="numeric" class="repeat-num"><select name="repeat-type"
-                                    class="repeat-type" style="display: none;">
+                                <input type="number" inputmode="numeric" class="repeat-num" min="1"><select
+                                    name="repeat-type" class="repeat-type" style="display: none;">
                                     <option value="hours">hours</option>
                                     <option value="days">days</option>
                                     <option value="weeks">weeks</option>
@@ -721,46 +721,60 @@
             });
         }
 
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                console.log("user allowed notifications");
+            } else {
+                alert('Hey! For this to work you kinda need to enable notifications.');
+            }
+        });
+
+        if ('PushManager' in window) {
+            navigator.serviceWorker.ready.then(async (registration) => {
+                const subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: 'BP6LNLZ3mgjKV3t_wO4DZdnd1QwAOWN_VIPoNWRB8-w4T2ATVEMIcuLgkm2D7L0uAAWX0oaMhWoUtQH-TjLqUvU',
+                });
+                console.log('Push Subscription:', subscription);
+
+                // Send the subscription to your server to store
+                await fetch('/api/send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(subscription),
+                });
+            });
+        }
+
 
         pings.forEach(ping => { setupPing(ping); checkPingDate(ping); });
 
 
-
-
         // Functions:
 
-        function notification(body, actions) {
-
-            if ('serviceWorker' in navigator && 'Notification' in window) {
-                Notification.requestPermission().then(permission => {
-
-
-                    if (permission === "granted") {
-
-                        navigator.serviceWorker.getRegistration().then(registration => {
-                            if (registration) {
-                                if (actions) {
-                                    registration.showNotification("Hello! Notifications are enabled.", {
-                                        body: body,
-                                        icon: "/images/PingMe.png",
-                                        actions: actions
-                                    });
-                                }
-                                else {
-                                    registration.showNotification("Hello! Notifications are enabled.", {
-                                        body: body,
-                                        icon: "/images/PingMe.png"
-                                    });
-                                }
-                            }
-                        });
-
-                    } else {
-
-                        alert('Hey! For this to work you kinda need to enable notifications.');
-                    }
-                });
+        async function notification(body, actions, tag) {
+            const subscription = await navigator.serviceWorker.ready.then(sw => sw.pushManager.getSubscription());
+            if (!subscription) {
+                console.error('no subscription :(');
+                return;
             }
+
+            fetch('/api/send-notification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    subscription: subscription,
+                    message: body,
+                    actions: actions,
+                    tag: tag
+                }),
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Notification sent with custom actions!');
+                } else {
+                    console.error('Failed to send notification:', response);
+                }
+            });
         }
 
         function addTimeToPing(ping, time) {
@@ -896,9 +910,9 @@
                     { action: 'complete', title: 'Complete!' },
                     { action: 'delay', title: 'Delay for a day' }
                 ];
-                let message = "Ping: '" + obj.querySelector('.ping-title').value + "' has pinged!"
-                notification(message, actions);
-
+                let message = "Ping: '" + obj.querySelector('.ping-title').value + "' has pinged!";
+                let tag = "Ping" + obj.querySelector('.ping-title').value;
+                notification(message, actions, tag);
 
             }
         }
@@ -1006,8 +1020,17 @@
         }
 
         function finishEditPing(obj) {
+
             let parentDiv = obj.parentElement;
             let grampsDiv = parentDiv.parentElement;
+
+
+            if (grampsDiv.querySelector('.repeat-num').value < 1) {
+                alert('Please delay a positive value :)');
+                return;
+            }
+
+
             let title = parentDiv.querySelector('.ping-title');
             let desc = grampsDiv.querySelector('.ping-desc');
 
