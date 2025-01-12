@@ -1,40 +1,26 @@
-import webPush from "web-push";
+//import webPush from "web-push";
+const webPush = require('web-push');
+
 
 const publicKey =
   "BP6LNLZ3mgjKV3t_wO4DZdnd1QwAOWN_VIPoNWRB8-w4T2ATVEMIcuLgkm2D7L0uAAWX0oaMhWoUtQH-TjLqUvU";
 const privateKey = "8lUs0i4BU0M8cVRcHTLDzrhnmMqAd35U5Zq-4UiVsTk";
 
-// Configure VAPID keys
 webPush.setVapidDetails("mailto:anic3tus.inv@gmail.com", publicKey, privateKey);
 
-module.exports = async (req, res) => {
-  if (req.method === "POST") {
-    // Handle POST request
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "POST request successful" }));
-  } else if (req.method === "GET") {
-    // Handle GET request
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "GET request successful" }));
-  } else {
-    // Handle unsupported methods
-    res.writeHead(405, { Allow: "GET, POST" });
-    res.end(`Method ${req.method} Not Allowed`);
-  }
-};
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    const { subscription, message, actions, tag } = req.body;
+    const { subscription, title, message, actions, tag } = req.body;
 
     const notificationActions = Array.isArray(actions) ? actions : [];
 
-    // Send the push notification
+    // why am i supsosed to have a regustration thing here??
     try {
       await webPush.sendNotification(
         subscription,
         JSON.stringify({
-          title: "Frontend Triggered Notification",
+          title: title,
           body: message || "Your ping has triggered! (Name not sent)",
           icon: "/images/PingMe.png",
           actions: notificationActions,

@@ -752,7 +752,7 @@
 
         // Functions:
 
-        async function notification(body, actions, tag) {
+        async function notification(title, body, actions, tag) {
             const subscription = await navigator.serviceWorker.ready.then(sw => sw.pushManager.getSubscription());
             if (!subscription) {
                 console.error('no subscription :(');
@@ -764,6 +764,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     subscription: subscription,
+                    title: title,
                     message: body,
                     actions: actions,
                     tag: tag
@@ -912,7 +913,7 @@
                 ];
                 let message = "Ping: '" + obj.querySelector('.ping-title').value + "' has pinged!";
                 let tag = "Ping" + obj.querySelector('.ping-title').value;
-                notification(message, actions, tag);
+                notification(tag + 'pinged!', message, actions, tag);
 
             }
         }

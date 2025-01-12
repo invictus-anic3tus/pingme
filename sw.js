@@ -26,3 +26,21 @@ self.addEventListener("notificationclick", (event) => {
     clients.openWindow('/')
   );
 });
+self.addEventListener('push', (event) => {
+  console.log('Push event received:', event);
+
+  const data = event.data ? event.data.json() : {};
+  console.log('Notification data:', data);
+
+  const title = data.title || 'Default Title';
+  const options = {
+      body: data.body || 'Default body',
+      icon: data.icon || '/images/pingme.png',
+      actions: data.actions || [],
+      tag: data.tag || 'default-tag',
+  };
+
+  event.waitUntil(
+      self.registration.showNotification(title, options)
+  );
+});
