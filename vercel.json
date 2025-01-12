@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+      {
+        "source": "/api/send-notification",
+        "destination": "/api/send-notification.js"
+      }
+    ]
+  }
