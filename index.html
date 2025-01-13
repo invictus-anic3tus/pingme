@@ -733,9 +733,9 @@
             navigator.serviceWorker.ready.then(async (registration) => {
                 const subscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
-                    applicationServerKey: 'BP6LNLZ3mgjKV3t_wO4DZdnd1QwAOWN_VIPoNWRB8-w4T2ATVEMIcuLgkm2D7L0uAAWX0oaMhWoUtQH-TjLqUvU',
+                    applicationServerKey: urlBase64ToUint8Array('BP6LNLZ3mgjKV3t_wO4DZdnd1QwAOWN_VIPoNWRB8-w4T2ATVEMIcuLgkm2D7L0uAAWX0oaMhWoUtQH-TjLqUvU'),
                 });
-                console.log('Push Subscription:', subscription);
+                console.log('Push Subscription:', subscription); // this is not logging the key for some reason
 
                 // Send the subscription to your server to store
                 await fetch('/api/send-notification', {
@@ -751,6 +751,18 @@
 
 
         // Functions:
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+
+            return outputArray;
+        }
 
         async function notification(title, body, actions, tag) {
             const subscription = await navigator.serviceWorker.ready.then(sw => sw.pushManager.getSubscription());
@@ -758,6 +770,7 @@
                 console.error('no subscription :(');
                 return;
             }
+            console.log(subscription);
 
             fetch('/api/send-notification', {
                 method: 'POST',
