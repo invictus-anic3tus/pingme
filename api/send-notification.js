@@ -2,7 +2,7 @@ const webPush = require("web-push");
 
 const publicKey =
   "BP6LNLZ3mgjKV3t_wO4DZdnd1QwAOWN_VIPoNWRB8-w4T2ATVEMIcuLgkm2D7L0uAAWX0oaMhWoUtQH-TjLqUvU";
-const privateKey = "<private_vapid_key>"; // Yes my real key is here
+const privateKey = "8lUs0i4BU0M8cVRcHTLDzrhnmMqAd35U5Zq-4UiVsTk"; // Yes my real key is here
 
 webPush.setVapidDetails("mailto:anic3tus.inv@gmail.com", publicKey, privateKey);
 
