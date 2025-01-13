@@ -741,14 +741,18 @@
                 await fetch('/api/send-notification', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(subscription),
+                    body: JSON.stringify({
+                        subscription: subscription,
+                        title: 'Notification title',
+                        message: 'notif body',
+                        actions: [],
+                        tag: 'test-notif'
+                    }),
                 });
+
+                pings.forEach(ping => { setupPing(ping); checkPingDate(ping); });
             });
         }
-
-
-        pings.forEach(ping => { setupPing(ping); checkPingDate(ping); });
-
 
         // Functions:
         function urlBase64ToUint8Array(base64String) {
@@ -925,7 +929,7 @@
                     { action: 'delay', title: 'Delay for a day' }
                 ];
                 let message = "Ping: '" + obj.querySelector('.ping-title').value + "' has pinged!";
-                let tag = "Ping " + obj.querySelector('.ping-title').value;
+                let tag = "Ping '" + obj.querySelector('.ping-title').value + "'";
                 notification(tag + ' pinged!', message, actions, tag);
 
             }
