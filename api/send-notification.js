@@ -17,6 +17,7 @@ export default async function handler(req, res) {
 
     // why am i supsosed to have a regustration thing here??
     try {
+      console.log(subscription.endpoint);
       await webPush.sendNotification(
         subscription,
         JSON.stringify({
