@@ -736,6 +736,7 @@
                     applicationServerKey: 'BP6LNLZ3mgjKV3t_wO4DZdnd1QwAOWN_VIPoNWRB8-w4T2ATVEMIcuLgkm2D7L0uAAWX0oaMhWoUtQH-TjLqUvU',
                 });
                 console.log('Push Subscription:', subscription);
+                console.log(JSON.stringify(subscription, null, 2));
 
                 // Send the subscription to your server to store
                 await fetch('/api/send-notification', {
@@ -912,8 +913,8 @@
                     { action: 'delay', title: 'Delay for a day' }
                 ];
                 let message = "Ping: '" + obj.querySelector('.ping-title').value + "' has pinged!";
-                let tag = "Ping" + obj.querySelector('.ping-title').value;
-                notification(tag + 'pinged!', message, actions, tag);
+                let tag = "Ping " + obj.querySelector('.ping-title').value;
+                notification(tag + ' pinged!', message, actions, tag);
 
             }
         }
