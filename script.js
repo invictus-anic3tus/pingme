@@ -1,6 +1,9 @@
+// sidebar and root
+
 const root = document.querySelector(":root");
 const body = document.querySelector("body");
 const sidebar = document.getElementById("sidebar");
+const main = document.getElementById('main');
 const sidebarHeader = document.getElementById("sidebar-header");
 const modeInd = document.getElementById("modeind");
 
@@ -17,14 +20,39 @@ const newTab = document.getElementById("add-ping-tab");
 const settingsTab = document.getElementById("settings-tab");
 const pingTemplate = document.getElementById("ping-template");
 
+// misfits
+
 const options = document.querySelectorAll(".options");
 const optionsPopUp = document.querySelectorAll(".dot-options");
 
-const addPingTime = document.getElementById('add-ping-time');
+// Add ping tab:
+
+const addPingName = document.getElementById("add-ping-name");
+const addPingDesc = document.getElementById("add-ping-desc");
+const addPingTime = document.getElementById("add-ping-time");
+const addPingRepeats = document.getElementById("add-ping-repeats");
+const addPingRptNum = document.getElementById("add-ping-repeat-number");
+const addPingRptType = document.getElementById("add-ping-rpt");
+const addPingButtons = document.getElementById("add-ping-buttons");
+
+const addPingDone = addPingButtons.querySelector(".complete-yes");
+const addPingClear = addPingButtons.querySelector(".delete-no");
+
+// other stuff
+
+const pubVapidKey = 'BPn0Ry5ZSfJJGxerDmCGGwVB75xBBCyHHTTyQaQWr2Gz244Ek12DSUs7kdimRYwcoPLjg0NCiVdIjAlfiBispqI';
 
 var deletedIds;
 
 populatePings("home");
+
+const dateOptions = {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+};
 
 var pings = document.querySelectorAll(".ping");
 var icons = document.querySelectorAll(".icon");
@@ -57,6 +85,28 @@ tabs.forEach((element) => {
 
 hardSetColor();
 
+
+for (let i = 0; i < pings.length; i++) {
+  let pingID = pings[i].id;
+  const compPingsContainer = document.getElementById('home-completed-pings-container');
+  const pingsContainer = document.getElementById('home-pings-container');
+  const completeBut = pings[i].querySelector('.complete-yes');
+
+  if (localStorage.getItem(pingID + '-completed') === 'true') {
+    compPingsContainer.appendChild(pings[i]);
+    
+    
+    completeBut.disabled = true;
+    completeBut.style.cursor = 'default';
+    completeBut.style.filter = 'grayscale(100%)';
+    
+  }
+  else {
+    pingsContainer.appendChild(pings[i]);
+  }
+}
+
+
 about.addEventListener("mouseover", (event) => {
   aboutpopup.style.scale = "1";
 });
@@ -64,10 +114,16 @@ about.addEventListener("mouseout", (event) => {
   aboutpopup.style.scale = "0";
 });
 
-
-//2025-01-21T12:00
-let aptt = new Date()
-let aptval = aptt.getFullYear() + '-' + ("0" + (aptt.getMonth() + 1)).slice(-2) + '-' + ("0" + (aptt.getDate() + 7)).slice(-2) + 'T' + aptt.getHours() + ':00';
+let aptt = new Date();
+let aptval =
+  aptt.getFullYear() +
+  "-" +
+  ("0" + (aptt.getMonth() + 1)).slice(-2) +
+  "-" +
+  ("0" + (aptt.getDate() + 7)).slice(-2) +
+  "T" +
+  aptt.getHours() +
+  ":00";
 addPingTime.value = aptval;
 
 if ("serviceWorker" in navigator) {
@@ -94,7 +150,7 @@ if ("PushManager" in window) {
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(
-        "BP6LNLZ3mgjKV3t_wO4DZdnd1QwAOWN_VIPoNWRB8-w4T2ATVEMIcuLgkm2D7L0uAAWX0oaMhWoUtQH-TjLqUvU"
+        pubVapidKey
       ),
     });
 
@@ -159,6 +215,10 @@ function checkPingDate(obj) {
   let dateStr = obj.querySelector(".ping-date").innerText;
   let date = new Date(dateStr);
 
+  if (localStorage.getItem(obj.id + '-completed') == 'true') {
+    return;
+  }
+
   if (isPingNow(date)) {
     let actions = [
       { action: "complete", title: "Complete!" },
@@ -178,14 +238,6 @@ function addTimeToPing(ping, time) {
   let date = new Date(dateStr);
 
   let newDate = addTimeToDate(date, time);
-
-  let dateOptions = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  };
 
   formatDate = newDate.toLocaleString("en-US", dateOptions);
   dateDisplay.innerText = formatDate;
@@ -231,6 +283,7 @@ function addTimeToDate(date, addedTime) {
 
 function completePing(obj, final) {
   if (final) {
+
     let doesRepeat = pingToAlter.querySelector(".does-repeat").checked;
 
     if (doesRepeat) {
@@ -239,9 +292,12 @@ function completePing(obj, final) {
         " " +
         pingToAlter.querySelector(".repeat-type").value;
       addTimeToPing(pingToAlter, addAmount);
+
     } else {
-      pingToAlter.style.display = "none";
+
       localStorage.setItem(pingToAlter.id + "-completed", "true");
+
+      document.getElementById('home-completed-pings-container').appendChild(pingToAlter);
     }
 
     popup.style.scale = "0";
@@ -251,7 +307,7 @@ function completePing(obj, final) {
     let doesRepeat = pingToAlter.querySelector(".does-repeat").checked;
 
     let messageBody =
-      "This will disable the ping until you resurrect it from the All Pings tab.";
+      "This will disable the ping until you resurrect it below.";
 
     if (doesRepeat) {
       messageBody =
@@ -309,31 +365,50 @@ function deletePing(obj, final) {
   if (final) {
     pingToAlter.style.display = "none";
 
-    allLocalStorage(pingToAlter.id + "-").forEach((element) => {
-      localStorage.removeItem(element.key);
-    });
-    popup.style.scale = "0";
+    numPings = localStorage.getItem("how-many-pings");
+
+    for (let i = parseInt(pingToAlter.id); i < parseInt(numPings); i++) {
+      console.log(i, pingToAlter.id);
+      
+      localStorage.setItem(i + '-title', localStorage.getItem((i + 1) + '-title'));
+      localStorage.setItem(i + '-desc', localStorage.getItem((i + 1) + '-desc'));
+      localStorage.setItem(i + '-does-repeat', localStorage.getItem((i + 1) + '-does-repeat'));
+      localStorage.setItem(i + '-repeat-num', localStorage.getItem((i + 1) + '-repeat-num'));
+      localStorage.setItem(i + '-next-ping', localStorage.getItem((i + 1) + '-next-ping'));
+      localStorage.setItem(i + '-repeat-type', localStorage.getItem((i + 1) + '-repeat-type'));
+
+      if (localStorage.getItem(i + '-title') == 'null') {
+        allLocalStorage(i + '-').forEach(storageItem => {
+          console.log(i, storageItem.key + ': ' + storageItem.value);
+          localStorage.removeItem(storageItem.key);
+        });
+      }
+
+    }
 
     localStorage.setItem(
-      "deleted-ids",
-      localStorage.getItem("deleted-ids") + "," + obj.id
-    );
-    localStorage.setItem(
       "how-many-pings",
-      parseInt(localStorage.getItem("how-many-pings")) - 1
+      parseInt(numPings) - 1
     );
+
+    numPings = localStorage.getItem("how-many-pings");
+
+
+    popup.style.scale = "0";
+  
   } else {
     let header =
       "Are you sure you want to delete ping " +
       obj.parentElement.parentElement.querySelector(".ping-title").value +
       "?";
-    let content = "All deletions are final!";
-    let act1 = 'this.parentElement.parentElement.style.scale = "0"';
-    let act2 = "deletePing(null, true)";
-
-    bodyPopUp(header, content, "go back", "delete", act1, act2);
 
     pingToAlter = obj.parentElement.parentElement;
+
+    let content = "All deletions are final!";
+    let act1 = 'this.parentElement.parentElement.style.scale = "0"';
+    let act2 = "deletePing(pingToAlter, true)";
+
+    bodyPopUp(header, content, "go back", "delete", act1, act2);
   }
 }
 
@@ -342,25 +417,18 @@ function deletePing(obj, final) {
 function populatePings(tab) {
   numPings = localStorage.getItem("how-many-pings");
 
-  if (localStorage.getItem("deleted-ids")) {
-    deletedIds = localStorage.getItem("deleted-ids").split(",").map(Number);
-  } else {
-    localStorage.setItem("deleted-ids", "0");
-    deletedIds = [0];
-  }
 
   if (!numPings || numPings == "0") {
     localStorage.setItem("how-many-pings", "0");
   } else {
-    // localStorage.setItem('how-many-pings', pings.length);
+    
     for (let i = 0; i < parseInt(numPings); i++) {
       const clone = pingTemplate.content.cloneNode(true);
 
       switch (tab) {
         case "home":
-          // clone.id = i.toString();
 
-          addPing(clone);
+          addPingToScreen(clone);
 
           break;
         case "all":
@@ -373,17 +441,9 @@ function populatePings(tab) {
   }
 }
 
-function setupPing(obj, index, isNew) {
+function setupPing(obj, index = 0, isNew = false) {
   obj.id = index;
-  // console.log(obj, obj.id);
 
-  if (
-    obj.style.display == "none" ||
-    localStorage.getItem(obj.id + "-deleted") == "true"
-  ) {
-    obj.style.display = "none";
-    return;
-  }
 
   let title = obj.querySelector(".ping-title");
   let nextPing = obj.querySelector(".ping-date");
@@ -394,6 +454,8 @@ function setupPing(obj, index, isNew) {
   let repeatTypeDisplay = obj.querySelector(".repeat-type-display");
   let doesRepeat = obj.querySelector(".does-repeat");
 
+  // console.log(obj, title, nextPing, desc, doesRepeat, repeatNum, repeatType)
+
   if (
     localStorage.getItem(obj.id + "-title") &&
     localStorage.getItem(obj.id + "-desc")
@@ -401,13 +463,26 @@ function setupPing(obj, index, isNew) {
     title.value = localStorage.getItem(obj.id + "-title");
     desc.value = localStorage.getItem(obj.id + "-desc");
   }
-  if (isNew) {
-    title.value = "My New Ping";
-    desc.value = "Ping Description";
+
+  if (!localStorage.getItem(obj.id + "-title")) {
+    localStorage.setItem(obj.id + "-title", title.value);
   }
   if (!localStorage.getItem(obj.id + "-next-ping")) {
     localStorage.setItem(obj.id + "-next-ping", nextPing.innerText);
   }
+  if (!localStorage.getItem(obj.id + "-desc")) {
+    localStorage.setItem(obj.id + "-desc", desc.value);
+  }
+  if (!localStorage.getItem(obj.id + "-does-repeat")) {
+    localStorage.setItem(obj.id + "-does-repeat", doesRepeat.checked);
+  }
+  if (!localStorage.getItem(obj.id + "-repeat-num")) {
+    localStorage.setItem(obj.id + "-repeat-num", repeatNum.value);
+  }
+  if (!localStorage.getItem(obj.id + "-repeat-type")) {
+    localStorage.setItem(obj.id + "-repeat-type", repeatType.value);
+  }
+
   nextPing.innerText = localStorage.getItem(obj.id + "-next-ping");
 
   fillEmptyText(obj);
@@ -425,7 +500,78 @@ function setupPing(obj, index, isNew) {
   }
 }
 
-function addPing(clone) {
+function addPingTabDone() {
+  createPing(
+    addPingName.value,
+    addPingTime.value,
+    addPingDesc.value,
+    addPingRepeats.checked,
+    addPingRptNum.value,
+    addPingRptType.value
+  );
+  addPingTabClear();
+}
+
+function addPingTabClear() {
+  addPingName.value = "";
+  addPingTime.value = aptval;
+  addPingDesc.value = "";
+  addPingRepeats.checked = false;
+  addPingRptNum.value = 1;
+  addPingRptType.value = "Hours";
+}
+
+function createPing(
+  name = "New Ping",
+  date = "Jan 19, 2025, 3:00 PM",
+  desc = "Ping Description",
+  rpts = false,
+  rptNum = 3,
+  rptType = "hours"
+) {
+  console.log(name, date, desc, rpts, rptNum, rptType);
+
+  const clone = pingTemplate.content.cloneNode(true);
+
+  clone.querySelector(".ping-title").value = name;
+  clone.querySelector(".ping-date").innerText = new Date(date).toLocaleString(
+    "en-US",
+    dateOptions
+  );
+  clone.querySelector(".ping-desc").value = desc;
+  clone.querySelector(".repeat-num-display").innerText = rptNum;
+  clone.querySelector(".repeat-num").value = rptNum;
+  clone.querySelector(".repeat-type").value = rptType;
+  clone.querySelector(".repeat-type-display").value = rptType;
+  clone.querySelector(".does-repeat").checked = rpts;
+
+  let htmlClone = document
+    .getElementById("home-pings-container")
+    .appendChild(clone);
+
+  pings = document.querySelectorAll(".ping");
+  icons = document.querySelectorAll(".icon");
+  editIcon = document.querySelectorAll(".edit");
+
+  for (let i = 0; i < pings.length; i++) {
+    if (false) {
+      // console.log("found ya");
+    } else {
+      setupPing(pings[i], i);
+      checkPingDate(pings[i]);
+    }
+  }
+
+  let numPings = parseInt(localStorage.getItem("how-many-pings"));
+
+  numPings = numPings + 1;
+
+  localStorage.setItem("how-many-pings", numPings);
+
+  tab("home");
+}
+
+function addPingToScreen(clone) {
   let dateOptions = {
     year: "numeric",
     month: "short",
@@ -448,8 +594,8 @@ function addPing(clone) {
   editIcon = document.querySelectorAll(".edit");
 
   for (let i = 0; i < pings.length; i++) {
-    if (deletedIds.includes(i)) {
-      console.log("found ya");
+    if (false) {
+      // console.log("found ya");
     } else {
       setupPing(pings[i], i, false);
       checkPingDate(pings[i]);
@@ -579,9 +725,6 @@ function fillEmptyText(obj) {
   if (title.value.trim() == "") {
     title.value = "My Ping";
   }
-  if (desc.value.trim() == "") {
-    desc.value = "Optional description about my ping";
-  }
 }
 
 //***************UI functions***************//
@@ -606,6 +749,8 @@ function bodyPopUp(header, content, button1, button2, button1act, button2act) {
 }
 
 function collapse() {
+  sidebar.style.overflow = 'hidden';
+
   if (!collapsed) {
     tabs.forEach((tab) => {
       let span = tab.querySelector("span");
@@ -619,16 +764,19 @@ function collapse() {
         img.style.paddingRight = "0";
       }
 
-      tab.style.marginBottom = "20%";
     });
 
     sidebarHeader.querySelector("span").style.display = "none";
-    sidebar.style.width = "fit-content";
+    sidebar.style.width = "80px";
+    main.style.width = "calc(100% - 80px)";
+    main.style.left = '80px';
+
     collapseInd.src = "/images/show_sidebar.png";
-    collapseBut.style.alignSelf = "flex-start";
+    // collapseBut.style.alignSelf = "flex-start";
 
     miniTabs.querySelector("#about").style.display = "none";
 
+    sidebar.style.overflow = 'auto';
     collapsed = true;
   } else {
     tabs.forEach((tab) => {
@@ -648,10 +796,17 @@ function collapse() {
 
     sidebarHeader.querySelector("span").style.display = "inline";
     sidebar.style.width = "200px";
+    main.style.width = "calc(100% - 200px)";
+    main.style.left = '200px';
+
     collapseInd.src = "/images/hide_sidebar.png";
-    collapseBut.style.alignSelf = "flex-end";
+    // collapseBut.style.alignSelf = "flex-end";
 
     miniTabs.querySelector("#about").style.display = "block";
+
+    setTimeout(function() {
+      sidebar.style.overflow = 'auto';
+    }, 0);
 
     collapsed = false;
   }

@@ -33,11 +33,11 @@
                         <img src="/images/Home.png" alt="Home" class="icon">
                         <span>Home</span></a>
                 </div>
-                <div class="tab" id="my-pings">
+                <!-- <div class="tab" id="my-pings">
                     <a onclick="tab('my-pings')">
                         <img src="/images/Pings.png" alt="My pings" class="icon">
                         <span>All pings</span></a>
-                </div>
+                </div> -->
                 <div class="tab" id="new">
                     <a onclick="tab('new')">
                         <img src="/images/Plus.png" alt="New ping" class="icon">
@@ -125,6 +125,7 @@
 
                     </div>
 
+
                 </div>
 
                 <div id="home-tab-add"
@@ -132,16 +133,24 @@
                     <img src="/images/Plus.png" alt="add ping" class="icon">
                     <button>Add Ping</button>
                 </div>
+
+                <div id="home-tab-completed-pings">
+
+                    <h1 style="text-align: center;">Completed Pings:</h1>
+
+                    <div id="home-completed-pings-container"></div>
+
+                </div>
             </div>
 
-            <div id="pings-tab" class="main-tab">
+            <!-- <div id="pings-tab" class="main-tab">
                 <h1 class="main-header">All Pings</h1>
 
                 <div id="all-pings">
 
                 </div>
 
-            </div>
+            </div> -->
 
             <div id="add-ping-tab" class="main-tab">
                 <h1 class="main-header">Add Ping</h1>
@@ -160,9 +169,22 @@
                     <label for="add-ping-repeats" class="add-ping-label">Does it repeat?</label>
                     <input type="checkbox" name="add-ping-repeats" id="add-ping-repeats">
                     
-                    <div class="add-ping-subsection">
+                    <div id="add-ping-subsection">
                         <label for="add-ping-time" class="add-ping-sublabel">If so, how often?</label>
-                        <input type="number">
+                        <span>Every</span>
+                        <input type="number" value="2" min="1" id="add-ping-repeat-number">
+                        <select name="add-ping-rpt" id="add-ping-rpt">
+                            <option value="hours">Hours</option>
+                            <option value="days">Days</option>
+                            <option value="weeks">Weeks</option>
+                            <option value="months">Months</option>
+                            <option value="years">Years</option>
+                        </select>
+                    </div>
+
+                    <div id="add-ping-buttons">
+                        <button class="complete-yes" style="font-size: 1.2em;" onclick="addPingTabDone()">Done!</button>
+                        <button class="delete-no" style="font-size: 1.2em;" onclick="addPingTabClear()">Clear</button>
                     </div>
                 </div>
 

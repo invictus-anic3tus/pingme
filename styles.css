@@ -29,10 +29,16 @@ body {
 
 #sidebar-main {
   display: flex;
-  height: fit-content;
 }
 
 #sidebar {
+  width: 200px;
+  height: 100vh;
+  min-height: 200px;
+  overflow: auto;
+  overflow-x: hidden;
+  position: fixed;
+
   background-color: var(--secondary-color);
   transition-duration: 0.3s;
 
@@ -41,11 +47,7 @@ body {
   padding-top: 0;
   margin-bottom: 0;
   border-right: 2px solid var(--font-color);
-
-  height: fit-content;
-  min-height: 100vh;
-
-  width: 200px;
+  z-index: 50;
 }
 
 #tabs {
@@ -191,8 +193,17 @@ body {
 
 /************** Main Block *************/
 
+
 #main {
-  width: 100vw;
+  width: calc(100% - 200px);
+  height: 200vh;
+  min-height: 1000px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 200px;
+
+  transition-duration: 0.3s;
 }
 
 .main-tab {
@@ -214,10 +225,12 @@ body {
   border-bottom-right-radius: 20px;
 }
 
-#home-pings-container {
+#home-pings-container, #home-completed-pings-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
+
+  margin-left: 20px;
 }
 
 .ping {
@@ -379,7 +392,7 @@ body {
   border-left: 2px solid var(--font-color);
   border-top: 2px solid var(--font-color);
   border-bottom: 2px solid var(--font-color);
-  border-radius: 10px 0px 0px 10px;
+  border-radius: 1000px 0px 0px 1000px;
   background-color: rgb(17, 204, 17);
 
   width: 50%;
@@ -427,7 +440,7 @@ body {
   border-right: 2px solid var(--font-color);
   border-top: 2px solid var(--font-color);
   border-bottom: 2px solid var(--font-color);
-  border-radius: 0px 10px 10px 0px;
+  border-radius: 0% 1000px 1000px 0%;
   background-color: rgb(255, 74, 74);
 
   width: 50%;
@@ -435,11 +448,11 @@ body {
 }
 
 #full-pop-up {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
 
-  transform: translate(-25%, -50%);
+  transform: translate(-50%, -50%);
 
   border: 2px solid var(--font-color);
   background-color: var(--primary-color);
@@ -447,6 +460,8 @@ body {
   padding: 10px;
   scale: 0;
   transition-duration: 0.3s;
+
+  z-index: 100;
 }
 
 #full-pop-up div {
@@ -487,11 +502,11 @@ body {
     width: fit-content;
     padding: 0px 20px 5px 0px;
 }
-.add-ping-subsection {
+#add-ping-subsection {
     margin-left: 15px;
 }
-#add-interface input, textarea {
-    border: 3px solid var(--primary-color);
+#add-interface input, #add-interface textarea, #add-interface select {
+    border: 3px solid black;
     border-radius: 5px;
     padding: 5px;
 }
@@ -513,6 +528,12 @@ label[for='add-ping-repeats'] {
 }
 #add-ping-repeats {
     display: inline;
+}
+#add-ping-buttons {
+  display: flex;
+  margin-top: 20px;
+  border-top: 2px solid var(--font-color);
+  padding-top: 20px;
 }
 
 /***************** Media Queries ***************/
