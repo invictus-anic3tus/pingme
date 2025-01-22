@@ -1,5 +1,7 @@
-import webPush from 'web-push';
-import { MongoClient } from 'mongodb';
+// import webPush from 'web-push';
+const webPush = require('web-push');
+const {MongoClient} = require('mongodb');
+// import { MongoClient } from 'mongodb';
 
 
 const uri = process.env.MONGODB_URI;
