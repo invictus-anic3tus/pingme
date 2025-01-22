@@ -155,7 +155,7 @@
             <div id="add-ping-tab" class="main-tab">
                 <h1 class="main-header">Add Ping</h1>
 
-                <div id="add-interface">
+                <div id="add-interface" style="margin-left: 20px;">
 
                     <label for="add-ping-name" class="add-ping-label">Your ping's name?</label>
                     <input type="text" name="ping-name" id="add-ping-name">
@@ -194,6 +194,26 @@
                 <h1 class="main-header">Settings</h1>
 
                 <div id="settings-interface">
+
+                    <div id="setting-tab-tab-wrapper">
+                        <button class="setting-tab-tab" onclick="setSettingsTab(event, 'general')" id="setting-tab-general">General</button>
+                        <button class="setting-tab-tab" onclick="setSettingsTab(event, 'appearance')">Appearance</button>
+                        <button class="setting-tab-tab" onclick="setSettingsTab(event, 'mobile')">Mobile App</button>
+                        <button class="setting-tab-tab" onclick="setSettingsTab(event, 'about')">About</button>
+                    </div>
+
+                    <div class="settings-content" id="settings-general">
+                        <h2 id="delete-data" onclick="deleteAllData(false)" style="cursor: pointer;"><b>Delete ALL my data</b></h2>
+                        <p>Deleted data can <i>NOT</i> be recovered!</p>
+                    </div>
+                    <div class="settings-content" id="settings-appearance">
+                        <h2>Theme:</h2>
+                        <div id="settings-themes">
+                            
+                        </div>
+                    </div>
+                    <div class="settings-content" id="settings-mobile">tacocat</div>
+                    <div class="settings-content" id="settings-about">racecar</div>
 
                 </div>
 

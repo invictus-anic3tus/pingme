@@ -196,8 +196,8 @@ body {
 
 #main {
   width: calc(100% - 200px);
-  height: 200vh;
-  min-height: 1000px;
+  height: 100vh;
+  min-height: fit-content;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -535,6 +535,53 @@ label[for='add-ping-repeats'] {
   border-top: 2px solid var(--font-color);
   padding-top: 20px;
 }
+
+
+
+/****************** Settings tab ****************/
+
+
+
+#settings-interface {
+  border: 0;
+  margin: 0;
+  background-color: transparent;
+  margin-left: 10px;
+}
+#setting-tab-tab-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.setting-tab-tab {
+  background-color: transparent;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  border-bottom: 2px solid var(--font-color);
+  margin: 0;
+  padding: 15px;
+  color: var(--font-color);
+  font-size: 1.2em;
+}
+.active {
+  filter: none;
+  border: 2px solid var(--font-color);
+  background-color: var(--secondary-color);
+  border-bottom: 2px solid var(--secondary-color);
+  padding: 13px;
+  padding-bottom: 15px;
+}
+
+.settings-content {
+  background-color: var(--secondary-color);
+  padding: 50px;
+  border-bottom: 2px solid var(--font-color);
+}
+
+
+
 
 /***************** Media Queries ***************/
 @media (max-width: 600px) {

@@ -115,15 +115,7 @@ about.addEventListener("mouseout", (event) => {
 });
 
 let aptt = new Date();
-let aptval =
-  aptt.getFullYear() +
-  "-" +
-  ("0" + (aptt.getMonth() + 1)).slice(-2) +
-  "-" +
-  ("0" + (aptt.getDate() + 7)).slice(-2) +
-  "T" +
-  aptt.getHours() +
-  ":00";
+let aptval = aptt.toISOString().slice(0, -7) + '00Z';
 addPingTime.value = aptval;
 
 if ("serviceWorker" in navigator) {
@@ -160,6 +152,8 @@ if ("PushManager" in window) {
     }
   });
 }
+
+setSettingsTab(undefined, 'general', true);
 
 //**********************Functions***************************//
 
@@ -207,6 +201,21 @@ async function notification(title, body, actions, tag) {
   });
 }
 
+const scheduleNotification = async (date, message, title, actions, tag) => {
+  await fetch('/api/schedule', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      date, // format: 2025-02-01T12:00:00Z
+      message,
+      title,
+      actions,
+      tag
+    })
+  });
+  console.log('Notification scheduled!');
+}
+
 //**************Ping Functions****************//
 
 // Ping notification functions:
@@ -219,17 +228,17 @@ function checkPingDate(obj) {
     return;
   }
 
-  if (isPingNow(date)) {
-    let actions = [
-      { action: "complete", title: "Complete!" },
-      { action: "delay", title: "Delay for a day" },
-    ];
-    let message =
-      "Ping: '" + obj.querySelector(".ping-title").value + "' has pinged!";
-    let rand = Math.floor(Math.random() * 10);
-    let tag = "Ping '" + obj.querySelector(".ping-title").value + "'";
-    notification(tag + " pinged!", message, actions, tag + "-id:" + rand);
-  }
+  // if (isPingNow(date)) {
+  //   let actions = [
+  //     { action: "complete", title: "Complete!" },
+  //     { action: "delay", title: "Delay for a day" },
+  //   ];
+  //   let message =
+  //     "Ping: '" + obj.querySelector(".ping-title").value + "' has pinged!";
+  //   let rand = Math.floor(Math.random() * 10);
+  //   let tag = "Ping '" + obj.querySelector(".ping-title").value + "'";
+  //   notification(tag + " pinged!", message, actions, tag + "-id:" + rand);
+  // }
 }
 
 function addTimeToPing(ping, time) {
@@ -368,7 +377,7 @@ function deletePing(obj, final) {
     numPings = localStorage.getItem("how-many-pings");
 
     for (let i = parseInt(pingToAlter.id); i < parseInt(numPings); i++) {
-      console.log(i, pingToAlter.id);
+      // console.log(i, pingToAlter.id);
       
       localStorage.setItem(i + '-title', localStorage.getItem((i + 1) + '-title'));
       localStorage.setItem(i + '-desc', localStorage.getItem((i + 1) + '-desc'));
@@ -379,7 +388,7 @@ function deletePing(obj, final) {
 
       if (localStorage.getItem(i + '-title') == 'null') {
         allLocalStorage(i + '-').forEach(storageItem => {
-          console.log(i, storageItem.key + ': ' + storageItem.value);
+          // console.log(i, storageItem.key + ': ' + storageItem.value);
           localStorage.removeItem(storageItem.key);
         });
       }
@@ -569,6 +578,8 @@ function createPing(
   localStorage.setItem("how-many-pings", numPings);
 
   tab("home");
+
+  scheduleNotification(date, 'You can choose to delay it or complete it now.', name + ' has pinged!', [{'complete': 'Complete!'}, {'delay': 'Delay for a day'}], 'ping-' + name);
 }
 
 function addPingToScreen(clone) {
@@ -842,6 +853,33 @@ function tab(tab) {
   }
 }
 
+function setSettingsTab(event, tab, overrides) {
+
+  var i, tabContent, tabButtons;
+
+  tabContent = document.getElementsByClassName('settings-content');
+
+  for( i = 0; i < tabContent.length; i++) {
+    tabContent[i].style.display = 'none';
+  }
+
+  tabButtons = document.querySelectorAll('.setting-tab-tab');
+  for (i = 0; i < tabButtons.length; i++) {
+    tabButtons[i].className = tabButtons[i].className.replace(" active", '');
+  }
+
+  document.getElementById('settings-' + tab).style.display = 'block';
+
+  if (overrides) {
+    document.getElementById('setting-tab-general').className += " active";
+  }
+  else if (typeof event !== 'undefined') {
+    event.currentTarget.className += " active";
+  }
+  
+
+}
+
 function colorMode() {
   if (dark) {
     setLight();
@@ -954,4 +992,17 @@ function allLocalStorage(selector) {
   }
 
   return returnItems;
+}
+
+function deleteAllData(final = false) {
+  if (final) {
+    localStorage.clear();
+
+    popup.style.scale = "0";
+
+    location.reload();
+  }
+  else {
+    bodyPopUp('Delete all data?', 'This cannot be undone.', 'return', 'delete', 'this.parentElement.parentElement.style.scale = "0"', 'deleteAllData(true)');
+  }
 }

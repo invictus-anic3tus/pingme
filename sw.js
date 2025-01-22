@@ -26,6 +26,7 @@ self.addEventListener("notificationclick", (event) => {
     clients.openWindow('/')
   );
 });
+
 self.addEventListener('push', (event) => {
   console.log('Push event received:', event);
 
