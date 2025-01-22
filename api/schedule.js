@@ -1,7 +1,8 @@
-// import webPush from 'web-push';
-const webPush = require('web-push');
-const {MongoClient} = require('mongodb');
-// import { MongoClient } from 'mongodb';
+// import cron from 'node-cron';
+import webPush from '../node_modules/web-push';
+// const webPush = require('web-push');
+// const {MongoClient} = require('mongodb');
+import { MongoClient } from '../node_modules/mongodb';
 
 
 const uri = process.env.MONGODB_URI;
