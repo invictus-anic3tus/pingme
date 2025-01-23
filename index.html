@@ -8,6 +8,19 @@
     <title>PingMe</title>
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function (OneSignal) {
+            await OneSignal.init({
+                appId: "8c2feb68-a0a8-4ae3-9053-f054c28e9032",
+                safari_web_id: "web.onesignal.auto.10d6980b-bbad-483e-b993-08fa2a289dd8",
+                notifyButton: {
+                    enable: true,
+                },
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -128,8 +141,7 @@
 
                 </div>
 
-                <div id="home-tab-add"
-                    onclick="tab('new')">
+                <div id="home-tab-add" onclick="tab('new')">
                     <img src="/images/Plus.png" alt="add ping" class="icon">
                     <button>Add Ping</button>
                 </div>
@@ -161,14 +173,15 @@
                     <input type="text" name="ping-name" id="add-ping-name">
 
                     <label for="add-ping-desc" class="add-ping-label">An optional description</label>
-                    <textarea name="add-ping-desc" id="add-ping-desc" placeholder="Descriptions, descriptions."></textarea>
+                    <textarea name="add-ping-desc" id="add-ping-desc"
+                        placeholder="Descriptions, descriptions."></textarea>
 
                     <label for="add-ping-time" class="add-ping-label">When should it first ping?</label>
                     <input type="datetime-local" name="add-ping-time" id="add-ping-time" value="2025-01-21T12:00">
 
                     <label for="add-ping-repeats" class="add-ping-label">Does it repeat?</label>
                     <input type="checkbox" name="add-ping-repeats" id="add-ping-repeats">
-                    
+
                     <div id="add-ping-subsection">
                         <label for="add-ping-time" class="add-ping-sublabel">If so, how often?</label>
                         <span>Every</span>
@@ -196,20 +209,23 @@
                 <div id="settings-interface">
 
                     <div id="setting-tab-tab-wrapper">
-                        <button class="setting-tab-tab" onclick="setSettingsTab(event, 'general')" id="setting-tab-general">General</button>
-                        <button class="setting-tab-tab" onclick="setSettingsTab(event, 'appearance')">Appearance</button>
+                        <button class="setting-tab-tab" onclick="setSettingsTab(event, 'general')"
+                            id="setting-tab-general">General</button>
+                        <button class="setting-tab-tab"
+                            onclick="setSettingsTab(event, 'appearance')">Appearance</button>
                         <button class="setting-tab-tab" onclick="setSettingsTab(event, 'mobile')">Mobile App</button>
                         <button class="setting-tab-tab" onclick="setSettingsTab(event, 'about')">About</button>
                     </div>
 
                     <div class="settings-content" id="settings-general">
-                        <h2 id="delete-data" onclick="deleteAllData(false)" style="cursor: pointer;"><b>Delete ALL my data</b></h2>
+                        <h2 id="delete-data" onclick="deleteAllData(false)" style="cursor: pointer;"><b>Delete ALL my
+                                data</b></h2>
                         <p>Deleted data can <i>NOT</i> be recovered!</p>
                     </div>
                     <div class="settings-content" id="settings-appearance">
                         <h2>Theme:</h2>
                         <div id="settings-themes">
-                            
+
                         </div>
                     </div>
                     <div class="settings-content" id="settings-mobile">tacocat</div>
@@ -231,7 +247,7 @@
 
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 
