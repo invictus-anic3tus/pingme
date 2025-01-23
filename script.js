@@ -118,16 +118,16 @@ let aptt = new Date();
 let aptval = aptt.toISOString().slice(0, -7) + '00Z';
 addPingTime.value = aptval;
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("/sw.js")
-    .then((registration) => {
-      console.log("Service Worker registered with scope:", registration.scope);
-    })
-    .catch((error) => {
-      console.error("Service worker error:", error);
-    });
-}
+// if ("serviceWorker" in navigator) {
+//   navigator.serviceWorker
+//     .register("/sw.js")
+//     .then((registration) => {
+//       console.log("Service Worker registered with scope:", registration.scope);
+//     })
+//     .catch((error) => {
+//       console.error("Service worker error:", error);
+//     });
+// }
 
 Notification.requestPermission().then((permission) => {
   if (permission === "granted") {
@@ -579,7 +579,7 @@ function createPing(
 
   tab("home");
 
-  scheduleNotification(date, 'You can choose to delay it or complete it now.', name + ' has pinged!', [{'complete': 'Complete!'}, {'delay': 'Delay for a day'}], 'ping-' + name);
+  // scheduleNotification(date, 'You can choose to delay it or complete it now.', name + ' has pinged!', [{'complete': 'Complete!'}, {'delay': 'Delay for a day'}], 'ping-' + name);
 }
 
 function addPingToScreen(clone) {
