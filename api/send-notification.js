@@ -1,4 +1,4 @@
-// import webPush from 'web-push';
+import webPush from 'web-push';
 // import { MongoClient } from 'mongodb';
 
 // const uri = process.env.MONGODB_URI;
