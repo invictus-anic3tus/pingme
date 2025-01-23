@@ -228,17 +228,17 @@ function checkPingDate(obj) {
     return;
   }
 
-  // if (isPingNow(date)) {
-  //   let actions = [
-  //     { action: "complete", title: "Complete!" },
-  //     { action: "delay", title: "Delay for a day" },
-  //   ];
-  //   let message =
-  //     "Ping: '" + obj.querySelector(".ping-title").value + "' has pinged!";
-  //   let rand = Math.floor(Math.random() * 10);
-  //   let tag = "Ping '" + obj.querySelector(".ping-title").value + "'";
-  //   notification(tag + " pinged!", message, actions, tag + "-id:" + rand);
-  // }
+  if (isPingNow(date)) {
+    let actions = [
+      { action: "complete", title: "Complete!" },
+      { action: "delay", title: "Delay for a day" },
+    ];
+    let message =
+      "Ping: '" + obj.querySelector(".ping-title").value + "' has pinged!";
+    let rand = Math.floor(Math.random() * 10);
+    let tag = "Ping '" + obj.querySelector(".ping-title").value + "'";
+    notification(tag + " pinged!", message, actions, tag + "-id:" + rand);
+  }
 }
 
 function addTimeToPing(ping, time) {

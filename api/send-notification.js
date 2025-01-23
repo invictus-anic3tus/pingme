@@ -1,17 +1,17 @@
 // import webPush from 'web-push';
 // import { MongoClient } from 'mongodb';
 
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
-let db;
+// const uri = process.env.MONGODB_URI;
+// const client = new MongoClient(uri);
+// let db;
 
-async function connectToDatabase() {
-  if (!db) {
-    await client.connect();
-    db = client.db('admin');
-  }
-  return db;
-}
+// async function connectToDatabase() {
+//   if (!db) {
+//     await client.connect();
+//     db = client.db('admin');
+//   }
+//   return db;
+// }
 
 const publicKey =
   "BPn0Ry5ZSfJJGxerDmCGGwVB75xBBCyHHTTyQaQWr2Gz244Ek12DSUs7kdimRYwcoPLjg0NCiVdIjAlfiBispqI";
@@ -34,36 +34,36 @@ export default async function handler(req, res) {
 
     // why am i supsosed to have a regustration thing here??
     try {
-      // console.log(subscription);
-      // await webPush.sendNotification(
-      //   subscription,
-      //   JSON.stringify({
-      //     title: title || 'Ping title',
-      //     body: message || "Your ping has triggered! (Name not sent)",
-      //     icon: "/images/PingMe.png",
-      //     actions: notificationActions,
-      //     tag: tag || "ping-message",
-      //   })
-      // );
-      // res.status(200).json({ message: "Notification sent!" });
-
-      const db = await connectToDatabase();
-      await db.collection('subscriptions').updateOne(
-        { endpoint: subscription.endpoint },
-        { $set: subscription },
-        { upsert: true}
+      console.log(subscription);
+      await webPush.sendNotification(
+        subscription,
+        JSON.stringify({
+          title: title || 'Ping title',
+          body: message || "Your ping has triggered! (Name not sent)",
+          icon: "/images/PingMe.png",
+          actions: notificationActions,
+          tag: tag || "ping-message",
+        })
       );
+      res.status(200).json({ message: "Notification sent!" });
 
-      const payload = JSON.stringify({
-        title: title || 'PingMe Notification!',
-        body: message || 'Placeholder content',
-        actions: actions || [],
-        tag: tag || 'default',
-        icon: '/images/PingMe.png'
-      });
+      // const db = await connectToDatabase();
+      // await db.collection('subscriptions').updateOne(
+      //   { endpoint: subscription.endpoint },
+      //   { $set: subscription },
+      //   { upsert: true}
+      // );
 
-      await webPush.sendNotification(subscription, payload);
-      res.status(201).json({ message: 'Notification sent and subscription saved' });
+      // const payload = JSON.stringify({
+      //   title: title || 'PingMe Notification!',
+      //   body: message || 'Placeholder content',
+      //   actions: actions || [],
+      //   tag: tag || 'default',
+      //   icon: '/images/PingMe.png'
+      // });
+
+      // await webPush.sendNotification(subscription, payload);
+      // res.status(201).json({ message: 'Notification sent and subscription saved' });
 
     } catch (error) {
       console.error("Error sending notification:", error);
