@@ -1,8 +1,8 @@
 // import cron from 'node-cron';
-import webPush from '../node_modules/web-push';
+import webPush from 'web-push';
 // const webPush = require('web-push');
 // const {MongoClient} = require('mongodb');
-import { MongoClient } from '../node_modules/mongodb';
+import { MongoClient } from 'mongodb';
 
 
 const uri = process.env.MONGODB_URI;
@@ -39,7 +39,7 @@ async function scheduleJob(date, message, title, actions, tag) {
     const payload = JSON.stringify({
       title: title || 'PingMe Notification',
       body: message,
-      icon: '/images/icon.png',
+      icon: '/public/images/icon.png',
       actions: actions,
       tag: tag || 'default'
     });

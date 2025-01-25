@@ -225,20 +225,20 @@ async function notification(title, body, actions, tag) {
   });
 }
 
-const scheduleNotification = async (date, message, title, actions, tag) => {
-  await fetch("/api/schedule", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      date, // format: 2025-02-01T12:00:00Z
-      message,
-      title,
-      actions,
-      tag,
-    }),
-  });
-  console.log("Notification scheduled!");
-};
+// const scheduleNotification = async (date, message, title, actions, tag) => {
+//   await fetch("/api/schedule", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({
+//       date, // format: 2025-02-01T12:00:00Z
+//       message,
+//       title,
+//       actions,
+//       tag,
+//     }),
+//   });
+//   console.log("Notification scheduled!");
+// };
 
 //**************Ping Functions****************//
 
@@ -682,7 +682,7 @@ function editPing(obj) {
   repeatNum.style.display = "inline";
   grampsDiv.querySelector(".repeat-num-display").style.display = "none";
 
-  obj.src = "/images/Check.png";
+  obj.src = "./images/Check.png";
   obj.style.marginTop = "1px";
   obj.setAttribute("onclick", "finishEditPing(this)");
 }
@@ -752,7 +752,7 @@ function finishEditPing(obj) {
   localStorage.setItem(grampsDiv.id + "-repeat-num", repeatNum.value);
   localStorage.setItem(grampsDiv.id + "-repeat-type", repeatType.value);
 
-  obj.src = "/images/Edit.png";
+  obj.src = "./images/Edit.png";
   obj.style.marginTop = "initial";
   obj.setAttribute("onclick", "editPing(this)");
 }
@@ -809,7 +809,7 @@ function collapse() {
     main.style.width = "calc(100% - 80px)";
     main.style.left = "80px";
 
-    collapseInd.src = "/images/show_sidebar.png";
+    collapseInd.src = "./images/show_sidebar.png";
     // collapseBut.style.alignSelf = "flex-start";
 
     miniTabs.querySelector("#about").style.display = "none";
@@ -837,7 +837,7 @@ function collapse() {
     main.style.width = "calc(100% - 200px)";
     main.style.left = "200px";
 
-    collapseInd.src = "/images/hide_sidebar.png";
+    collapseInd.src = "./images/hide_sidebar.png";
     // collapseBut.style.alignSelf = "flex-end";
 
     miniTabs.querySelector("#about").style.display = "block";
@@ -924,7 +924,7 @@ function setDark() {
   colorModeSetting.value = 'dark';
   
   updateRootThemeProperties(true);
-  modeInd.src = "/images/light_mode.png";
+  modeInd.src = "./images/light_mode.png";
 
   icons.forEach((icon) => {
     if ((icon.style.filter = "invert(0)")) {
@@ -939,7 +939,7 @@ function setLight() {
 
   updateRootThemeProperties(false);
 
-  modeInd.src = "/images/dark_mode.png";
+  modeInd.src = "./images/dark_mode.png";
 
   icons.forEach((icon) => {
     if ((icon.style.filter = "invert(100%)")) {

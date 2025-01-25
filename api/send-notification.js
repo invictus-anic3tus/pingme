@@ -40,7 +40,7 @@ export default async function handler(req, res) {
         JSON.stringify({
           title: title || 'Ping title',
           body: message || "Your ping has triggered! (Name not sent)",
-          icon: "/images/PingMe.png",
+          icon: "/public/images/PingMe.png",
           tag: tag || "ping-message",
         })
       );
