@@ -5,6 +5,10 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
+self.addEventListener('fetch', (event) => {
+  console.log("fetch intercepted:", event.request.url);
+})
+
 self.addEventListener("activate", (event) => {
   console.log("Service Worker activated.");
   event.waitUntil(self.clients.claim());

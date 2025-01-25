@@ -3,7 +3,7 @@
 const root = document.querySelector(":root");
 const body = document.querySelector("body");
 const sidebar = document.getElementById("sidebar");
-const main = document.getElementById('main');
+const main = document.getElementById("main");
 const sidebarHeader = document.getElementById("sidebar-header");
 const modeInd = document.getElementById("modeind");
 
@@ -38,9 +38,18 @@ const addPingButtons = document.getElementById("add-ping-buttons");
 const addPingDone = addPingButtons.querySelector(".complete-yes");
 const addPingClear = addPingButtons.querySelector(".delete-no");
 
+// settings tab
+
+const themeButtonsGrid = document.getElementById("settings-themes");
+const themeButtons = themeButtonsGrid.querySelectorAll("button");
+const colorModeSetting = document.getElementById('color-mode-setting');
+
 // other stuff
 
-const pubVapidKey = 'BPn0Ry5ZSfJJGxerDmCGGwVB75xBBCyHHTTyQaQWr2Gz244Ek12DSUs7kdimRYwcoPLjg0NCiVdIjAlfiBispqI';
+let selectedTab = "home";
+
+const pubVapidKey =
+  "BPn0Ry5ZSfJJGxerDmCGGwVB75xBBCyHHTTyQaQWr2Gz244Ek12DSUs7kdimRYwcoPLjg0NCiVdIjAlfiBispqI";
 
 var deletedIds;
 
@@ -68,12 +77,15 @@ var darkBKG = "#222831";
 var lightBKG = "#FFFFFF";
 var lightSecondary = "#e6be74";
 var darkSecondary = "#3A4750";
+var lightHover = "#fdfdfd";
+var darkHover = "#888888";
 var fontColor = "#000000";
+var darkFontColor = "#FFFFFF";
 
 var collapsed = false;
 var pingToAlter;
 
-// Code to execute at beginning:
+//**********Code to execute at beginning*************:
 
 tabs.forEach((element) => {
   element.style.backgroundColor = "transparent";
@@ -83,29 +95,29 @@ tabs.forEach((element) => {
   }
 });
 
-hardSetColor();
+setThemeButtonAppearances();
+setTheme(localStorage.getItem("theme"), true);
 
+hardSetColor();
 
 for (let i = 0; i < pings.length; i++) {
   let pingID = pings[i].id;
-  const compPingsContainer = document.getElementById('home-completed-pings-container');
-  const pingsContainer = document.getElementById('home-pings-container');
-  const completeBut = pings[i].querySelector('.complete-yes');
+  const compPingsContainer = document.getElementById(
+    "home-completed-pings-container"
+  );
+  const pingsContainer = document.getElementById("home-pings-container");
+  const completeBut = pings[i].querySelector(".complete-yes");
 
-  if (localStorage.getItem(pingID + '-completed') === 'true') {
+  if (localStorage.getItem(pingID + "-completed") === "true") {
     compPingsContainer.appendChild(pings[i]);
-    
-    
+
     completeBut.disabled = true;
-    completeBut.style.cursor = 'default';
-    completeBut.style.filter = 'grayscale(100%)';
-    
-  }
-  else {
+    completeBut.style.cursor = "default";
+    completeBut.style.filter = "grayscale(100%)";
+  } else {
     pingsContainer.appendChild(pings[i]);
   }
 }
-
 
 about.addEventListener("mouseover", (event) => {
   aboutpopup.style.scale = "1";
@@ -115,7 +127,7 @@ about.addEventListener("mouseout", (event) => {
 });
 
 let aptt = new Date();
-let aptval = aptt.toISOString().slice(0, -7) + '00Z';
+let aptval = aptt.toISOString().slice(0, -7) + "00Z";
 addPingTime.value = aptval;
 
 if ("serviceWorker" in navigator) {
@@ -141,9 +153,7 @@ if ("PushManager" in window) {
   navigator.serviceWorker.ready.then(async (registration) => {
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(
-        pubVapidKey
-      ),
+      applicationServerKey: urlBase64ToUint8Array(pubVapidKey),
     });
 
     for (let i = 0; i < pings.length; i++) {
@@ -153,7 +163,21 @@ if ("PushManager" in window) {
   });
 }
 
-setSettingsTab(undefined, 'general', true);
+
+let deferredPrompt;
+const downloadMobileButton = document.getElementById('download-mobile');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  downloadMobileButton.addEventListener('click', () => {
+    deferredPrompt.prompt();
+  });
+});
+
+
+setSettingsTab(undefined, "general", true);
 
 //**********************Functions***************************//
 
@@ -202,19 +226,19 @@ async function notification(title, body, actions, tag) {
 }
 
 const scheduleNotification = async (date, message, title, actions, tag) => {
-  await fetch('/api/schedule', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json'},
+  await fetch("/api/schedule", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       date, // format: 2025-02-01T12:00:00Z
       message,
       title,
       actions,
-      tag
-    })
+      tag,
+    }),
   });
-  console.log('Notification scheduled!');
-}
+  console.log("Notification scheduled!");
+};
 
 //**************Ping Functions****************//
 
@@ -224,7 +248,7 @@ function checkPingDate(obj) {
   let dateStr = obj.querySelector(".ping-date").innerText;
   let date = new Date(dateStr);
 
-  if (localStorage.getItem(obj.id + '-completed') == 'true') {
+  if (localStorage.getItem(obj.id + "-completed") == "true") {
     return;
   }
 
@@ -292,7 +316,6 @@ function addTimeToDate(date, addedTime) {
 
 function completePing(obj, final) {
   if (final) {
-
     let doesRepeat = pingToAlter.querySelector(".does-repeat").checked;
 
     if (doesRepeat) {
@@ -301,12 +324,12 @@ function completePing(obj, final) {
         " " +
         pingToAlter.querySelector(".repeat-type").value;
       addTimeToPing(pingToAlter, addAmount);
-
     } else {
-
       localStorage.setItem(pingToAlter.id + "-completed", "true");
 
-      document.getElementById('home-completed-pings-container').appendChild(pingToAlter);
+      document
+        .getElementById("home-completed-pings-container")
+        .appendChild(pingToAlter);
     }
 
     popup.style.scale = "0";
@@ -378,33 +401,42 @@ function deletePing(obj, final) {
 
     for (let i = parseInt(pingToAlter.id); i < parseInt(numPings); i++) {
       // console.log(i, pingToAlter.id);
-      
-      localStorage.setItem(i + '-title', localStorage.getItem((i + 1) + '-title'));
-      localStorage.setItem(i + '-desc', localStorage.getItem((i + 1) + '-desc'));
-      localStorage.setItem(i + '-does-repeat', localStorage.getItem((i + 1) + '-does-repeat'));
-      localStorage.setItem(i + '-repeat-num', localStorage.getItem((i + 1) + '-repeat-num'));
-      localStorage.setItem(i + '-next-ping', localStorage.getItem((i + 1) + '-next-ping'));
-      localStorage.setItem(i + '-repeat-type', localStorage.getItem((i + 1) + '-repeat-type'));
 
-      if (localStorage.getItem(i + '-title') == 'null') {
-        allLocalStorage(i + '-').forEach(storageItem => {
+      localStorage.setItem(
+        i + "-title",
+        localStorage.getItem(i + 1 + "-title")
+      );
+      localStorage.setItem(i + "-desc", localStorage.getItem(i + 1 + "-desc"));
+      localStorage.setItem(
+        i + "-does-repeat",
+        localStorage.getItem(i + 1 + "-does-repeat")
+      );
+      localStorage.setItem(
+        i + "-repeat-num",
+        localStorage.getItem(i + 1 + "-repeat-num")
+      );
+      localStorage.setItem(
+        i + "-next-ping",
+        localStorage.getItem(i + 1 + "-next-ping")
+      );
+      localStorage.setItem(
+        i + "-repeat-type",
+        localStorage.getItem(i + 1 + "-repeat-type")
+      );
+
+      if (localStorage.getItem(i + "-title") == "null") {
+        allLocalStorage(i + "-").forEach((storageItem) => {
           // console.log(i, storageItem.key + ': ' + storageItem.value);
           localStorage.removeItem(storageItem.key);
         });
       }
-
     }
 
-    localStorage.setItem(
-      "how-many-pings",
-      parseInt(numPings) - 1
-    );
+    localStorage.setItem("how-many-pings", parseInt(numPings) - 1);
 
     numPings = localStorage.getItem("how-many-pings");
 
-
     popup.style.scale = "0";
-  
   } else {
     let header =
       "Are you sure you want to delete ping " +
@@ -426,17 +458,14 @@ function deletePing(obj, final) {
 function populatePings(tab) {
   numPings = localStorage.getItem("how-many-pings");
 
-
   if (!numPings || numPings == "0") {
     localStorage.setItem("how-many-pings", "0");
   } else {
-    
     for (let i = 0; i < parseInt(numPings); i++) {
       const clone = pingTemplate.content.cloneNode(true);
 
       switch (tab) {
         case "home":
-
           addPingToScreen(clone);
 
           break;
@@ -452,7 +481,6 @@ function populatePings(tab) {
 
 function setupPing(obj, index = 0, isNew = false) {
   obj.id = index;
-
 
   let title = obj.querySelector(".ping-title");
   let nextPing = obj.querySelector(".ping-date");
@@ -760,7 +788,7 @@ function bodyPopUp(header, content, button1, button2, button1act, button2act) {
 }
 
 function collapse() {
-  sidebar.style.overflow = 'hidden';
+  sidebar.style.overflow = "hidden";
 
   if (!collapsed) {
     tabs.forEach((tab) => {
@@ -774,20 +802,19 @@ function collapse() {
       if (img) {
         img.style.paddingRight = "0";
       }
-
     });
 
     sidebarHeader.querySelector("span").style.display = "none";
     sidebar.style.width = "80px";
     main.style.width = "calc(100% - 80px)";
-    main.style.left = '80px';
+    main.style.left = "80px";
 
     collapseInd.src = "/images/show_sidebar.png";
     // collapseBut.style.alignSelf = "flex-start";
 
     miniTabs.querySelector("#about").style.display = "none";
 
-    sidebar.style.overflow = 'auto';
+    sidebar.style.overflow = "auto";
     collapsed = true;
   } else {
     tabs.forEach((tab) => {
@@ -808,15 +835,15 @@ function collapse() {
     sidebarHeader.querySelector("span").style.display = "inline";
     sidebar.style.width = "200px";
     main.style.width = "calc(100% - 200px)";
-    main.style.left = '200px';
+    main.style.left = "200px";
 
     collapseInd.src = "/images/hide_sidebar.png";
     // collapseBut.style.alignSelf = "flex-end";
 
     miniTabs.querySelector("#about").style.display = "block";
 
-    setTimeout(function() {
-      sidebar.style.overflow = 'auto';
+    setTimeout(function () {
+      sidebar.style.overflow = "auto";
     }, 0);
 
     collapsed = false;
@@ -824,12 +851,18 @@ function collapse() {
 }
 
 function tab(tab) {
+  selectedTab = tab;
+
   tabs.forEach((element) => {
     element.style.backgroundColor = "transparent";
   });
   var tabobj = document.getElementById(tab);
-  tabobj.style.backgroundColor =
-    getComputedStyle(root).getPropertyValue("--hover-color");
+
+  if (dark) {
+    tabobj.style.backgroundColor = darkHover;
+  } else {
+    tabobj.style.backgroundColor = lightHover;
+  }
 
   document.querySelectorAll(".main-tab").forEach((tab) => {
     tab.style.display = "none";
@@ -854,30 +887,26 @@ function tab(tab) {
 }
 
 function setSettingsTab(event, tab, overrides) {
-
   var i, tabContent, tabButtons;
 
-  tabContent = document.getElementsByClassName('settings-content');
+  tabContent = document.getElementsByClassName("settings-content");
 
-  for( i = 0; i < tabContent.length; i++) {
-    tabContent[i].style.display = 'none';
+  for (i = 0; i < tabContent.length; i++) {
+    tabContent[i].style.display = "none";
   }
 
-  tabButtons = document.querySelectorAll('.setting-tab-tab');
+  tabButtons = document.querySelectorAll(".setting-tab-tab");
   for (i = 0; i < tabButtons.length; i++) {
-    tabButtons[i].className = tabButtons[i].className.replace(" active", '');
+    tabButtons[i].className = tabButtons[i].className.replace(" active", "");
   }
 
-  document.getElementById('settings-' + tab).style.display = 'block';
+  document.getElementById("settings-" + tab).style.display = "block";
 
   if (overrides) {
-    document.getElementById('setting-tab-general').className += " active";
-  }
-  else if (typeof event !== 'undefined') {
+    document.getElementById("setting-tab-general").className += " active";
+  } else if (typeof event !== "undefined") {
     event.currentTarget.className += " active";
   }
-  
-
 }
 
 function colorMode() {
@@ -892,12 +921,9 @@ function colorMode() {
 }
 
 function setDark() {
-  fontColor = "#FFFFFF";
-  root.style.setProperty("--primary-color", darkBKG);
-  root.style.setProperty("--hover-color", "#888888");
-  root.style.setProperty("--secondary-color", darkSecondary);
-  root.style.setProperty("--font-color", fontColor);
-
+  colorModeSetting.value = 'dark';
+  
+  updateRootThemeProperties(true);
   modeInd.src = "/images/light_mode.png";
 
   icons.forEach((icon) => {
@@ -909,11 +935,9 @@ function setDark() {
 }
 
 function setLight() {
-  fontColor = "#000000";
-  root.style.setProperty("--primary-color", lightBKG);
-  root.style.setProperty("--hover-color", "#fdfdfd");
-  root.style.setProperty("--secondary-color", lightSecondary);
-  root.style.setProperty("--font-color", fontColor);
+  colorModeSetting.value = 'light';
+
+  updateRootThemeProperties(false);
 
   modeInd.src = "/images/dark_mode.png";
 
@@ -923,6 +947,20 @@ function setLight() {
     }
   });
   resetSelector();
+}
+
+function updateRootThemeProperties(dark) {
+  if (dark) {
+    root.style.setProperty("--primary-color", darkBKG);
+    root.style.setProperty("--hover-color", darkHover);
+    root.style.setProperty("--secondary-color", darkSecondary);
+    root.style.setProperty("--font-color", darkFontColor);
+  } else {
+    root.style.setProperty("--primary-color", lightBKG);
+    root.style.setProperty("--hover-color", lightHover);
+    root.style.setProperty("--secondary-color", lightSecondary);
+    root.style.setProperty("--font-color", fontColor);
+  }
 }
 
 function hardSetColor() {
@@ -1001,8 +1039,179 @@ function deleteAllData(final = false) {
     popup.style.scale = "0";
 
     location.reload();
-  }
-  else {
-    bodyPopUp('Delete all data?', 'This cannot be undone.', 'return', 'delete', 'this.parentElement.parentElement.style.scale = "0"', 'deleteAllData(true)');
+  } else {
+    bodyPopUp(
+      "Delete all data?",
+      "This cannot be undone.",
+      "return",
+      "delete",
+      'this.parentElement.parentElement.style.scale = "0"',
+      "deleteAllData(true)"
+    );
   }
 }
+
+//***********Settings functions****************/
+
+function setThemeButtonAppearances() {
+  themeButtons.forEach((button) => {
+    button.style.border = "2px solid black";
+    button.addEventListener("click", (ev) => {
+      setTheme(button.id);
+    });
+  });
+}
+
+
+if (dark) {
+  colorModeSetting.value = 'dark';
+}
+else {
+  colorModeSetting.value = 'light';
+}
+
+colorModeSetting.addEventListener('change', ev => {
+  if (colorModeSetting.value == 'dark') {
+    localStorage.setItem('dark', 'true');
+    setDark();
+  }
+  else {
+    setLight();
+    localStorage.setItem('dark', 'false');
+  }
+});
+
+function setTheme(buttonTheme, inital) {
+  let theme;
+
+  if (inital) {
+    theme = buttonTheme;
+  } else {
+    theme = buttonTheme.slice(6);
+  }
+  localStorage.setItem("theme", theme);
+
+  // classic stark cool-blue aquamarine lush-green blinding colorful galaxy
+
+  switch (theme) {
+    case "classic":
+      darkBKG = "#222831";
+      lightBKG = "#FFFFFF";
+      lightSecondary = "#e6be74";
+      darkSecondary = "#3A4750";
+      lightHover = "#fdfdfd";
+      darkHover = "#888888";
+      fontColor = "#000000";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+    case "stark":
+      darkBKG = "#161616";
+      lightBKG = "#FFFFFF";
+      lightSecondary = "#e5e4e1";
+      darkSecondary = "#282828";
+      lightHover = "#c8c8c4";
+      darkHover = "#434341";
+      fontColor = "#000000";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+    case "cool-blue":
+      darkBKG = "#1a1f3b";
+      lightBKG = "#daeff5";
+      lightSecondary = "#bff5ff";
+      darkSecondary = "#2c3669";
+      lightHover = "#8ce2fa";
+      darkHover = "#2e5e9e";
+      fontColor = "#000000";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+    case "aquamarine":
+      darkBKG = "#013140";
+      lightBKG = "#91d1ed";
+      lightSecondary = "#99a8ff";
+      darkSecondary = "#12334a";
+      lightHover = "#8ce2fa";
+      darkHover = "#2e5e9e";
+      fontColor = "#000000";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+    case "lush-green":
+      darkBKG = "#002b0b";
+      lightBKG = "#afdb3d";
+      lightSecondary = "#3ddb40";
+      darkSecondary = "#115c11";
+      lightHover = "#d7f7d8";
+      darkHover = "#003301";
+      fontColor = "#000000";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+    case "blinding":
+      darkBKG = "#00ff11";
+      lightBKG = "#ff0000";
+      lightSecondary = "#00fff7";
+      darkSecondary = "#ffdefc";
+      lightHover = "#00ff84";
+      darkHover = "#00eeff";
+      fontColor = "#FFFFFF";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+    case "colorful":
+      darkBKG = "#b328b8";
+      lightBKG = "#e0d612";
+      lightSecondary = "#12a2e0";
+      darkSecondary = "#2c3669";
+      lightHover = "#12e034";
+      darkHover = "#ad2b36";
+      fontColor = "#000000";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+    case "galaxy":
+      darkBKG = "#211a3b";
+      lightBKG = "#cca3f7";
+      lightSecondary = "linear-gradient(#e314ce,rgb(225, 102, 230))";
+      darkSecondary = "linear-gradient(#900ee7,rgb(34, 0, 31))";
+      lightHover = "#b78af2";
+      darkHover = "#3c018a";
+      fontColor = "#000000";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+    default:
+      darkBKG = "#222831";
+      lightBKG = "#FFFFFF";
+      lightSecondary = "#e6be74";
+      darkSecondary = "#3A4750";
+      lightHover = "#fdfdfd";
+      darkHover = "#888888";
+      fontColor = "#000000";
+      darkFontColor = "#FFFFFF";
+      updateRootThemeProperties(dark);
+      break;
+  }
+
+  tabs.forEach((tab) => {
+    if (tab.style.backgroundColor != "transparent") {
+      if (dark) {
+        tab.style.backgroundColor = darkHover;
+      } else {
+        tab.style.backgroundColor = lightHover;
+      }
+    }
+  });
+
+  themeButtons.forEach((button) => {
+    button.style.border = "2px solid black";
+    button.style.margin = "4px";
+  });
+
+  let selectedBut = document.getElementById("style-" + theme);
+  selectedBut.style.border = "4px solid gold";
+  selectedBut.style.margin = "2px";
+}
+

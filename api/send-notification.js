@@ -41,7 +41,6 @@ export default async function handler(req, res) {
           title: title || 'Ping title',
           body: message || "Your ping has triggered! (Name not sent)",
           icon: "/images/PingMe.png",
-          actions: notificationActions,
           tag: tag || "ping-message",
         })
       );
