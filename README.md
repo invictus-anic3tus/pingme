@@ -14,8 +14,8 @@ There are also settings! The "General" tab doesn't have a lot for now, but you c
 
 ## BYOP (build your own PingMe!)
 
-Step 1: clone the repo however you wish
-Step 2: **ADD CREDITS TO ME!!!!!!!!!!** I mean it. Credit me first line in the readme in all caps and header
-Step 3: Become Vercelly accounted
-Step 4: Install any necessary npm packages i forgot :3
-Step 5: run `vercel --prod`
+Step 1: clone the repo however you wish <br>
+Step 2: **ADD CREDITS TO ME!!!!!!!!!!** I mean it. Credit me first line in the readme in all caps and header <br>
+Step 3: Become Vercelly accounted <br>
+Step 4: Install any necessary npm packages i forgot :3 <br>
+Step 5: run `vercel --prod` <br>
